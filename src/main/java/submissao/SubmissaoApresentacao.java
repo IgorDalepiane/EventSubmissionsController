@@ -1,12 +1,21 @@
 package submissao;
 
 public abstract class SubmissaoApresentacao extends Submissao{
-    protected String resumo;
-    protected String abstractS;
-    protected int duracao;
+    private String resumo;
+    private String _abstract;
+    private int duracao;
 
     @Override
     public String toString() {
-        return super.toString();
+        StringBuilder result = new StringBuilder(super.toString());
+        result.append(" Resumo: ")
+                .append(resumo)
+                .append(" Abstract: ")
+                .append(_abstract)
+                .append(" Duração: ")
+                .append(duracao)
+                .append("min");
+
+        return result.toString();
     }
 }

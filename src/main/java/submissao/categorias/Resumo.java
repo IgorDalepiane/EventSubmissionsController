@@ -1,4 +1,7 @@
 package submissao.categorias;
 
-public class Resumo {
+import submissao.SubmissaoCientifica;
+
+public class Resumo extends SubmissaoCientifica {
+
 }
