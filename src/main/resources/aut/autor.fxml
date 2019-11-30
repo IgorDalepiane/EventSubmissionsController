@@ -12,7 +12,7 @@
          <items>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <TableView fx:id="tableLeft" layoutY="32.0" prefHeight="398.0" prefWidth="240.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="tableLeft" layoutY="32.0" prefHeight="321.0" prefWidth="240.0" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <columns>
                         <TableColumn fx:id="tableColumnNome" text="Nome" />
                         <TableColumn fx:id="tableColumnUniversidade" text="Universidade" />
@@ -24,6 +24,11 @@
                         <Cursor fx:constant="DEFAULT" />
                      </cursor>
                   </TableView>
+                  <HBox alignment="CENTER" layoutX="-1.0" layoutY="321.0" prefHeight="42.0" prefWidth="240.0" spacing="10.0">
+                     <children>
+                        <ChoiceBox fx:id="choiceBox" prefHeight="25.0" prefWidth="90.0" />
+                        <TextField fx:id="textField" prefHeight="25.0" prefWidth="122.0" />
+                     </children></HBox>
                </children>
             </AnchorPane>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
