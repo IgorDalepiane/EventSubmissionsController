@@ -42,4 +42,9 @@ public class indexController implements Initializable {
         AnchorPane root = FXMLLoader.load(getClass().getResource("/aut/autor.fxml"));
         anchor.getChildren().setAll(root);
     }
+
+    public void handleSubmissao(ActionEvent actionEvent) throws IOException {
+        AnchorPane root = FXMLLoader.load(getClass().getResource("/sub/submissao.fxml"));
+        anchor.getChildren().setAll(root);
+    }
 }

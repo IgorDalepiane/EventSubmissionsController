@@ -15,7 +15,7 @@ public abstract class SubmissaoCientifica extends Submissao {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder(super.toString());
-        result.append( "Instituição: ");
+        result.append("\n\nInstituição: ");
         for (String i :
                 instituicao) {
             //é o último
@@ -25,7 +25,7 @@ public abstract class SubmissaoCientifica extends Submissao {
                 result.append(i).append(", ");
             }
         }
-        result.append( " Palavras-chave: ");
+        result.append("\n\nPalavras-chave: ");
         for (String p :
                 palavraChave) {
             //é o último

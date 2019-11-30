@@ -21,7 +21,7 @@ public abstract class Submissao {
 
     private Situacao situacao;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Autor> autores = new ArrayList<>();
 
     private int maxAut;
@@ -40,6 +40,29 @@ public abstract class Submissao {
 
     public List<Autor> getAutores() {
         return autores;
+    }
+
+    public String getAutoresInline() {
+        StringBuilder result = new StringBuilder();
+        for (Autor a:
+             autores) {
+            result.append(a.getNome());
+        }
+        return result.toString();
+    }
+
+    public String getAutoresString() {
+        StringBuilder result = new StringBuilder();
+        for (Autor a :
+                autores) {
+            //é o último
+            if (a.equals(autores.get(autores.size() - 1)))
+                result.append(a.getNome());
+            else {
+                result.append(a.getNome()).append(", ");
+            }
+        }
+        return result.toString();
     }
 
     public void setAutores(List<Autor> autores) {
@@ -79,21 +102,12 @@ public abstract class Submissao {
         StringBuilder result = new StringBuilder();
         result.append("Título: ")
                 .append(titulo)
-                .append(" Situação: ")
+                .append("\n\nSituação: ")
                 .append(situacao)
-                .append(" Autores: ");
-        for (Autor autor :
-                autores) {
-            //é o último
-            if (autor.equals(autores.get(autores.size() - 1)))
-                result.append(autor.getNome());
-            else {
-                result.append(autor.getNome()).append(", ");
-            }
-        }
-        result.append(" Max autores: ")
+                .append("\n\nAutores: ")
+                .append(getAutoresString())
+                .append("\n\nMax autores: ")
                 .append(maxAut);
-
         return result.toString();
     }
 }

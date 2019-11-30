@@ -25,7 +25,7 @@ public class Palestra extends SubmissaoApresentacao {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder(super.toString());
-        result.append(" Currículo: ")
+        result.append("\n\nCurrículo: ")
                 .append(curriculo);
         return result.toString();
     }
