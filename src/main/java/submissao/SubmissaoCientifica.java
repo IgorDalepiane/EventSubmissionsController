@@ -1,5 +1,13 @@
 package submissao;
 
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.PrimaryKeyJoinColumn;
+
+@Entity
+@PrimaryKeyJoinColumn(name = "id")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class SubmissaoCientifica extends Submissao {
     protected String[] instituicao;
     protected String[] palavraChave;

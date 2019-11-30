@@ -6,7 +6,6 @@ import submissao.SubmissaoCientifica;
 import javax.persistence.*;
 
 @Entity
-@Table( name = "Artigos" )
 public class Artigo extends SubmissaoCientifica {
     @Id
     @GeneratedValue(generator="increment")

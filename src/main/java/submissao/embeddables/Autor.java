@@ -3,28 +3,32 @@ package submissao.embeddables;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.List;
 
+@Entity
 @Embeddable
 public class Autor {
     @Id
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
     private Long id;
-    private String nome;
 
-    public Autor(String nome) {
-        this.nome = nome;
-    }
+    private String nome;
+    private String universidade;
 
     public Autor() {
     }
 
-    public Long getId() {
-        return id;
+    public String getUniversidade() {
+        return universidade;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUniversidade(String universidade) {
+        this.universidade = universidade;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getNome() {
@@ -34,4 +38,5 @@ public class Autor {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
 }
