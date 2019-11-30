@@ -10,13 +10,23 @@ import submissao.embeddables.Autor;
 import utils.HibernateUtil;
 import utils.InterfaceUtil;
 
-public class autorInsertController {
-    @FXML private TextField textFieldNome;
-    @FXML private TextField textFieldUniversidade;
-    @FXML private Button closeButton;
+public class autorUpdateController {
+    @FXML
+    private TextField textFieldNome;
+    @FXML
+    private TextField textFieldUniversidade;
+    @FXML
+    private Button closeButton;
 
-    public void inserir(ActionEvent actionEvent) {
-        Autor a = new Autor();
+    private Autor a;
+
+    void initAutor(Autor a) {
+        this.a = a;
+        textFieldNome.setText(a.getNome());
+        textFieldUniversidade.setText(a.getUniversidade());
+    }
+
+    public void update(ActionEvent actionEvent) {
         try {
             a.setNome(textFieldNome.getText());
             a.setUniversidade(textFieldUniversidade.getText().toUpperCase());
@@ -24,7 +34,7 @@ public class autorInsertController {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
 
-            session.save(a);
+            session.update(a);
 
             session.getTransaction().commit();
             session.close();

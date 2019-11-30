@@ -34,11 +34,12 @@ public class autorController implements Initializable {
 
     //table lateral direita
     @FXML
-    private TableView tableRight;
+    private TableView<Submissao> tableRight;
     @FXML
-    private TableColumn tableColumnTipo;
+    private TableColumn<Submissao, String> tableColumnTipo;
     @FXML
-    private TableColumn tableColumnTitulo;
+    private TableColumn<Submissao, String> tableColumnTitulo;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
@@ -56,7 +57,6 @@ public class autorController implements Initializable {
      */
     private void tableRight(Autor aut) {
         if (aut != null) {
-
             tableColumnTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
             tableColumnTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
 
@@ -78,14 +78,22 @@ public class autorController implements Initializable {
     }
 
     public void alterarDialog(ActionEvent actionEvent) throws IOException {
-        AnchorPane anchor = FXMLLoader.load(autorController.class.getResource("/autorUpdate.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/autorUpdate.fxml"));
 
         Stage dialogStage = new Stage();
         dialogStage.setTitle("Edição de Autor");
 
-        Scene scene = new Scene(anchor);
+        Scene scene = new Scene(loader.load());
         dialogStage.setScene(scene);
-        dialogStage.showAndWait();
+
+        autorUpdateController upCtrl = loader.getController();
+        Autor selecionado = tableLeft.getSelectionModel().getSelectedItem();
+        if (selecionado != null) {
+            upCtrl.initAutor(selecionado);
+            dialogStage.showAndWait();
+        } else {
+            InterfaceUtil.erro("Selecione um autor");
+        }
 
         tableLeft.setItems(FXCollections.observableArrayList(listar()));
     }
