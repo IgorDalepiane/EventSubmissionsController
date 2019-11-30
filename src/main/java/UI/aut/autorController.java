@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -41,7 +42,7 @@ public class autorController implements Initializable {
     private TableColumn<Submissao, String> tableColumnTitulo;
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize(URL url, ResourceBundle resourceBundle) { //carrega os valores na tabela à esquerda
         tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         tableColumnUniversidade.setCellValueFactory(new PropertyValueFactory<>("universidade"));
         tableLeft.setItems(FXCollections.observableArrayList(listar()));
@@ -65,7 +66,7 @@ public class autorController implements Initializable {
     }
 
     public void inserirDialog(ActionEvent actionEvent) throws IOException {
-        AnchorPane anchor = FXMLLoader.load(autorController.class.getResource("/autorInsert.fxml"));
+        AnchorPane anchor = FXMLLoader.load(autorController.class.getResource("/aut/autorInsert.fxml"));
 
         Stage dialogStage = new Stage();
         dialogStage.setTitle("Cadastro de Autor");
@@ -78,7 +79,7 @@ public class autorController implements Initializable {
     }
 
     public void alterarDialog(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/autorUpdate.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/aut/autorUpdate.fxml"));
 
         Stage dialogStage = new Stage();
         dialogStage.setTitle("Edição de Autor");
@@ -99,6 +100,26 @@ public class autorController implements Initializable {
     }
 
     public void removerDialog(ActionEvent actionEvent) {
+        try {
+            Autor a = tableLeft.getSelectionModel().getSelectedItem();
+            if (a != null) {
+                if (InterfaceUtil.confirma("Tem certeza que deseja apagar o autor?\n" +a.getNome() + " - " + a.getUniversidade())
+                        .get() == ButtonType.OK) {
+                    Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+                    session.beginTransaction();
+
+                    session.remove(a);
+
+                    session.getTransaction().commit();
+                    session.close();
+
+                    tableLeft.setItems(FXCollections.observableArrayList(listar()));
+                    InterfaceUtil.sucesso("Autor apagado com sucesso.");
+                }
+            }
+        } catch (HibernateException e) {
+            InterfaceUtil.erro(e.getMessage());
+        }
     }
 
     public List<Autor> listar() {

@@ -21,7 +21,7 @@ public abstract class Submissao {
 
     private Situacao situacao;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Autor> autores = new ArrayList<>();
 
     private int maxAut;

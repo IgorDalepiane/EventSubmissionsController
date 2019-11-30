@@ -4,8 +4,11 @@ import UI.indexController;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+
+import java.util.Optional;
 
 public class InterfaceUtil extends Application {
     public static Stage stage = new Stage();
@@ -43,6 +46,18 @@ public class InterfaceUtil extends Application {
     public static void sucesso(String texto) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(texto);
-        alert.show();
+        alert.showAndWait();
+    }
+
+    /**
+     * Mostra o diálogo de confirmação ao usuário e retorna o botão clicado
+     *
+     * @param texto o corpo da mensagem
+     */
+    public static Optional<ButtonType> confirma(String texto) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText(texto);
+        return alert.showAndWait();
+
     }
 }
