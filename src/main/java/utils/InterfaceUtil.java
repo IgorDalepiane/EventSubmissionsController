@@ -1,7 +1,6 @@
 package utils;
 
-import UI.indexController;
-import UI.sub.submissaoController;
+import UI.submissaoController;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Alert;
@@ -12,7 +11,7 @@ import javafx.stage.Stage;
 import java.util.Optional;
 
 public class InterfaceUtil extends Application {
-    public static Stage stage = new Stage();
+    public static final Stage stage = new Stage();
 
     @Override
     public void start(Stage primaryStage) throws Exception {

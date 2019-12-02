@@ -2,12 +2,14 @@ package submissao.categorias;
 
 import submissao.SubmissaoApresentacao;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
 public class Palestra extends SubmissaoApresentacao {
+    @Column(columnDefinition = "TEXT")
     private String curriculo;
 
     public Palestra() {
@@ -24,9 +26,8 @@ public class Palestra extends SubmissaoApresentacao {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder(super.toString());
-        result.append("\n\nCurrículo: ")
-                .append(curriculo);
-        return result.toString();
+        return super.toString()
+                + "\n\nCurrículo: "
+                + curriculo;
     }
 }

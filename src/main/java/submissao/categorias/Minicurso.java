@@ -2,13 +2,17 @@ package submissao.categorias;
 
 import submissao.SubmissaoApresentacao;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
 public class Minicurso extends SubmissaoApresentacao {
+
+    @Column(columnDefinition = "TEXT")
     private String recursos;
+    @Column(columnDefinition = "TEXT")
     private String metodologia;
 
     public Minicurso() {
@@ -33,11 +37,9 @@ public class Minicurso extends SubmissaoApresentacao {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder(super.toString());
-        result.append("\n\nRecursos: ")
-                .append(recursos)
-                .append("\n\nMetodologia: ")
-                .append(metodologia);
-        return result.toString();
+        return super.toString() + "\n\nRecursos: " +
+                recursos +
+                "\n\nMetodologia: " +
+                metodologia;
     }
 }

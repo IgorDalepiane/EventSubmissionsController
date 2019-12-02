@@ -43,15 +43,13 @@ public abstract class SubmissaoApresentacao extends Submissao {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder(super.toString());
-        result.append("\n\nResumo: ")
-                .append(resumo)
-                .append("\n\nAbstract: ")
-                .append(_abstract)
-                .append("\n\nDuração: ")
-                .append(duracao)
-                .append("min");
 
-        return result.toString();
+        return super.toString() + "\n\nResumo: " +
+                resumo +
+                "\n\nAbstract: " +
+                _abstract +
+                "\n\nDuração: " +
+                duracao +
+                "min";
     }
 }

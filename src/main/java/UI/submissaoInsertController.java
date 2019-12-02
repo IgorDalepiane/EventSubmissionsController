@@ -1,10 +1,11 @@
-package UI.sub;
+package UI;
 
+import exceptions.FormularioException;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,25 +17,46 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckListView;
 import org.controlsfx.control.textfield.CustomTextField;
-import org.hibernate.HibernateError;
+import org.controlsfx.control.textfield.TextFields;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.type.TextType;
 import submissao.Situacao;
 import submissao.Submissao;
-import submissao.SubmissaoApresentacao;
 import submissao.SubmissaoCientifica;
 import submissao.categorias.*;
 import utils.HibernateUtil;
 import utils.InterfaceUtil;
 
+import java.awt.*;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
-public class submissaoUpdateController implements Initializable {
+public class submissaoInsertController implements Initializable {
 
     @FXML
     private VBox vboxTop;
+    //radio buttons
+    @FXML
+    private RadioButton radioArtigo;
+    @FXML
+    private RadioButton radioMonografia;
+    @FXML
+    private RadioButton radioRelatorioTecnico;
+    @FXML
+    private RadioButton radioResumo;
+    @FXML
+    private RadioButton radioMinicurso;
+    @FXML
+    private RadioButton radioPalestra;
+    private RadioButton radioSelecionado;
+    private List<RadioButton> radioCientificas;
+    private List<RadioButton> radioApresentacoes;
+
     //Submissao.class
+    @FXML
+    private GridPane gridSubmissao;
     @FXML
     private TextField textFieldTitulo;
     @FXML
@@ -127,18 +149,64 @@ public class submissaoUpdateController implements Initializable {
 
     private Submissao sub;
 
-    void init(Submissao sub) {
-        this.sub = sub;
+    private void init() {
         removeSpecifics();
-        //remove todos quando fecha a janela
-        closeButton.getScene().getWindow().setOnHiding(e -> removeSpecifics());
-        initSubPai();
+        radios();
+    }
+
+    private void radios() {
+        radioCientificas = Arrays.asList(
+                radioArtigo,
+                radioMonografia,
+                radioRelatorioTecnico,
+                radioResumo
+        );
+        radioApresentacoes = Arrays.asList(
+                radioMinicurso,
+                radioPalestra
+        );
+        ToggleGroup toggle = new ToggleGroup();
+        toggle.getToggles().setAll(
+                radioArtigo,
+                radioMonografia,
+                radioRelatorioTecnico,
+                radioResumo,
+                radioMinicurso,
+                radioPalestra);
+        toggle.selectedToggleProperty().addListener((observable, old_toggle, new_toggle) -> {
+            if (new_toggle != null) {
+                textFieldTitulo.clear();
+                autores.getItems().clear();
+                choiceBoxSituacao.setValue(null);
+                removeSpecifics();
+                radioSelecionado = (RadioButton) new_toggle;
+                switch (radioSelecionado.getText()) {
+                    case "Artigo":
+                        sub = new Artigo();
+                        break;
+                    case "Minicurso":
+                        sub = new Minicurso();
+                        break;
+                    case "Monografia":
+                        sub = new Monografia();
+                        break;
+                    case "Palestra":
+                        sub = new Palestra();
+                        break;
+                    case "Relatório Técnico":
+                        sub = new RelatorioTecnico();
+                        break;
+                    case "Resumo":
+                        sub = new Resumo();
+                        break;
+                }
+                initSubPai();
+            }
+        });
     }
 
     //Submissao.class
     private void initSubPai() {
-        textFieldTitulo.setText(sub.getTitulo());
-        choiceBoxSituacao.setValue(sub.getSituacao());
         textFieldAutor.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
                 String input = textFieldAutor.getText();
@@ -166,39 +234,33 @@ public class submissaoUpdateController implements Initializable {
             }
         });
 
-        //carrega a list dos autores
-        autores.getItems().addAll(FXCollections.observableArrayList(sub.getAutores()));
         autores.getCheckModel().getCheckedIndices().addListener((ListChangeListener<Integer>) c -> {
             while (c.next()) {
                 if (c.wasAdded()) {
                     for (int i : c.getAddedSubList()) {
-                        if (autores.getItems().size() != 1) {
+                        if (autores.getItems().size() > 1)
                             autores.getItems().remove(i);
-                        } else {
-                            InterfaceUtil.erro("Deve existir pelo menos um autor.");
-                        }
                     }
                 }
             }
         });
 
-        initSubMed();
+        if (radioCientificas.contains(radioSelecionado))
+            initSubMed("SubmissaoCientifica");
+        else if (radioApresentacoes.contains(radioSelecionado))
+            initSubMed("SubmissaoApresentacao");
     }
 
     //SubmissaoApresentacao.class e SubmissaoCientifica.class
-    private void initSubMed() {
-        switch (sub.getClass().getSuperclass().getSimpleName()) {
+    private void initSubMed(String tipoMed) {
+        switch (tipoMed) {
             case "SubmissaoApresentacao":
-                vboxTop.getChildren().add(1, gridApresentacao);
+                vboxTop.getChildren().add(2, gridApresentacao);
 
-                textAreaResumo.setText(((SubmissaoApresentacao) sub).getResumo());
-                textAreaAbstract.setText(((SubmissaoApresentacao) sub).get_abstract());
-                sliderDuracao.setValue(((SubmissaoApresentacao) sub).getDuracao());
-
-                initSubLow();
+                initSubLow(radioSelecionado.getText());
                 break;
             case "SubmissaoCientifica":
-                vboxTop.getChildren().add(1, gridCientifica);
+                vboxTop.getChildren().add(2, gridCientifica);
 
                 textFieldInstituicao.setOnKeyPressed(keyEvent -> {
                     if (keyEvent.getCode().equals(KeyCode.ENTER)) {
@@ -217,16 +279,13 @@ public class submissaoUpdateController implements Initializable {
                         textFieldInstituicao.setDisable(false);
                     }
                 });
-                instituicoes.getItems().addAll(FXCollections.observableArrayList(((SubmissaoCientifica) sub).getInstituicao()));
+                instituicoes.getItems().addAll(FXCollections.observableArrayList());
                 instituicoes.getCheckModel().getCheckedIndices().addListener((ListChangeListener<Integer>) c -> {
                     while (c.next()) {
                         if (c.wasAdded()) {
                             for (int i : c.getAddedSubList()) {
-                                if (instituicoes.getItems().size() != 1) {
+                                if (instituicoes.getItems().size() > 1)
                                     instituicoes.getItems().remove(i);
-                                } else {
-                                    InterfaceUtil.erro("Deve existir pelo menos uma instituição.");
-                                }
                             }
                         }
                     }
@@ -248,44 +307,35 @@ public class submissaoUpdateController implements Initializable {
                         textFieldPalavraschave.setDisable(false);
                     }
                 });
-                palavraschave.getItems().addAll(FXCollections.observableArrayList(((SubmissaoCientifica) sub).getPalavraChave()));
+                palavraschave.getItems().addAll(FXCollections.observableArrayList());
                 palavraschave.getCheckModel().getCheckedIndices().addListener((ListChangeListener<Integer>) c -> {
                     while (c.next()) {
                         if (c.wasAdded()) {
                             for (int i : c.getAddedSubList()) {
-                                if (palavraschave.getItems().size() != 1) {
+                                if (palavraschave.getItems().size() > 1)
                                     palavraschave.getItems().remove(i);
-                                } else {
-                                    InterfaceUtil.erro("Deve existir pelo menos uma palavra chave.");
-                                }
                             }
                         }
                     }
                 });
 
-                initSubLow();
+                initSubLow(radioSelecionado.getText());
                 break;
         }
 
     }
 
     //Classes específicas
-    private void initSubLow() {
-        vboxTop.getChildren().add(2, gridEspecifica);
-        switch (sub.getClass().getSimpleName()) {
+    private void initSubLow(String especifica) {
+        vboxTop.getChildren().add(3, gridEspecifica);
+        switch (especifica) {
             case "Artigo":
                 gridEspecifica.addRow(0, spResumoLabel, spResumo);
                 gridEspecifica.addRow(1, spAbstractLabel, spAbstract);
-                Artigo art = (Artigo) sub;
-                spResumo.setText(art.getResumo());
-                spAbstract.setText(art.get_abstract());
                 break;
             case "Minicurso":
                 gridEspecifica.addRow(0, spRecursosLabel, spRecursos);
                 gridEspecifica.addRow(1, spMetodologiaLabel, spMetodologia);
-                Minicurso mini = (Minicurso) sub;
-                spRecursos.setText(mini.getRecursos());
-                spMetodologia.setText(mini.getRecursos());
                 break;
             case "Monografia":
                 gridEspecifica.addRow(0, spTipoLabel, spTipo);
@@ -295,31 +345,15 @@ public class submissaoUpdateController implements Initializable {
                 gridEspecifica.addRow(4, spNumPagsLabel, spNumPags);
                 gridEspecifica.addRow(5, spResumoLabel, spResumo);
                 gridEspecifica.addRow(6, spAbstractLabel, spAbstract);
-                Monografia mono = (Monografia) sub;
-                spTipo.setItems(FXCollections.observableArrayList(Tipo.values()));
-                spTipo.setValue(mono.getTipo());
-                spOrientador.setText(mono.getOrientador());
-                spCurso.setText(mono.getCurso());
-                spAno.setText(String.valueOf(mono.getAno()));
-                spNumPags.setText(String.valueOf(mono.getnPaginas()));
-                spResumo.setText(mono.getResumo());
-                spAbstract.setText(mono.get_abstract());
                 break;
             case "Palestra":
                 gridEspecifica.addRow(0, spCurriculoLabel, spCurriculo);
-                Palestra pal = (Palestra) sub;
-                spCurriculo.setText(pal.getCurriculo());
                 break;
-            case "RelatorioTecnico":
+            case "Relatório Técnico":
                 gridEspecifica.addRow(0, spAnoLabel, spAno);
                 gridEspecifica.addRow(1, spNumPagsLabel, spNumPags);
                 gridEspecifica.addRow(2, spResumoLabel, spResumo);
                 gridEspecifica.addRow(3, spAbstractLabel, spAbstract);
-                RelatorioTecnico rel = (RelatorioTecnico) sub;
-                spAno.setText(String.valueOf(rel.getAno()));
-                spNumPags.setText(String.valueOf(rel.getnPaginas()));
-                spResumo.setText(rel.getResumo());
-                spAbstract.setText(rel.get_abstract());
                 break;
             case "Resumo":
                 //resumo nao tem campos específicos, mas pelo bem da
@@ -328,8 +362,8 @@ public class submissaoUpdateController implements Initializable {
         }
         btnConfirmar.setOnAction(e -> {
             try {
-                update(sub);
-            } catch (HibernateException ex) {
+                insert();
+            } catch (HibernateException | FormularioException ex) {
                 InterfaceUtil.erro(ex.getMessage());
             }
         });
@@ -337,99 +371,46 @@ public class submissaoUpdateController implements Initializable {
 
     private void removeSpecifics() {
         gridEspecifica.getChildren().clear();
-        //grids exceto a primeira
         vboxTop.getChildren().removeAll(
                 gridCientifica,
                 gridApresentacao,
                 gridEspecifica);
     }
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        removeSpecifics();
-        //popular a choicebox
+        //popular as choiceboxex
         choiceBoxSituacao.setItems(FXCollections.observableArrayList(Situacao.values()));
+        spTipo.setItems(FXCollections.observableArrayList(Tipo.values()));
+        //remove todos quando fecha a janela
+//        vboxTop.getScene().getWindow().setOnHiding(e -> removeSpecifics());
+        init();
     }
 
-    private void update(Submissao subGenerica) throws HibernateException {
-        //Submissao.class
-        subGenerica.setTitulo(textFieldTitulo.getText());
-        subGenerica.setSituacao(choiceBoxSituacao.getValue());
-        subGenerica.setAutores(autores.getItems());
+    private void insert() throws HibernateException, FormularioException {
+        String errorMsg = methods.form(sub, textFieldTitulo, choiceBoxSituacao, autores, textAreaResumo, textAreaAbstract, sliderDuracao, spRecursos, spMetodologia, spCurriculo, instituicoes, palavraschave, spResumo, spAbstract, spTipo, spOrientador, spCurso, spAno, spNumPags);
 
-        //SubmissaoApresentacao
-        switch (subGenerica.getClass().getSuperclass().getSimpleName()) {
-            case "SubmissaoApresentacao":
-                SubmissaoApresentacao subApres = (SubmissaoApresentacao) subGenerica;
-                subApres.setResumo(textAreaResumo.getText());
-                subApres.set_abstract(textAreaAbstract.getText());
-                subApres.setDuracao((int) sliderDuracao.getValue());
+        if (errorMsg.equals("")) {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
 
-                switch (subApres.getClass().getSimpleName()) {
-                    case "Minicurso":
-                        Minicurso subMini = (Minicurso) subApres;
-                        subMini.setRecursos(spRecursos.getText());
-                        subMini.setMetodologia(spMetodologia.getText());
-                        break;
-                    case "Palestra":
-                        Palestra subPal = (Palestra) subApres;
-                        subPal.setCurriculo(spCurriculo.getText());
-                        break;
-                }
+            session.save(sub);
 
-                break;
-            case "SubmissaoCientifica":
-                SubmissaoCientifica subCi = (SubmissaoCientifica) subGenerica;
-                //submissaocientifica.class
-                subCi.setInstituicao(instituicoes.getItems());
-                subCi.setPalavraChave(palavraschave.getItems());
+            session.getTransaction().commit();
+            session.close();
 
-                switch (subCi.getClass().getSimpleName()) {
-                    case "Artigo":
-                        Artigo art = (Artigo) subCi;
-                        art.setResumo(spResumo.getText());
-                        art.set_abstract(spAbstract.getText());
-                        break;
-                    case "Monografia":
-                        Monografia mono = (Monografia) subCi;
-                        mono.setTipo(spTipo.getValue());
-                        mono.setOrientador(spOrientador.getText());
-                        mono.setCurso(spCurso.getText());
-                        mono.setAno(Integer.parseInt(spAno.getText()));
-                        mono.setnPaginas(Integer.parseInt(spNumPags.getText()));
-                        mono.setResumo(spResumo.getText());
-                        mono.set_abstract(spAbstract.getText());
-                        break;
-                    case "RelatorioTecnico":
-                        RelatorioTecnico rel = (RelatorioTecnico) subCi;
-                        rel.setAno(Integer.parseInt(spAno.getText()));
-                        rel.setnPaginas(Integer.parseInt(spNumPags.getText()));
-                        rel.setResumo(spResumo.getText());
-                        rel.set_abstract(spAbstract.getText());
-                        break;
-                    case "Resumo":
-                        //resumo nao tem campos específicos, mas pelo bem da
-                        //consistência, merece um lugarzinho no switch
-                        break;
-                }
-        }
+            InterfaceUtil.sucesso("A submissão\n\n(" + sub.getClass().getSimpleName() + ") "
+                    + sub.getTitulo() +
+                    "\n\nfoi inserida com sucesso.");
+        } else
+            throw new FormularioException(errorMsg);
 
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-
-        session.update(subGenerica);
-
-        session.getTransaction().commit();
-        session.close();
-
-        InterfaceUtil.sucesso("A submissão\n\n(" + subGenerica.getClass().getSimpleName() + ") "
-                + subGenerica.getTitulo() +
-                "\n\nfoi alterada com sucesso.");
-
-        closeDialog(null);
+        closeDialog();
     }
 
-    public void closeDialog(ActionEvent actionEvent) {
+    @FXML
+    private void closeDialog() {
         Stage s = (Stage) closeButton.getScene().getWindow();
         s.close();
     }

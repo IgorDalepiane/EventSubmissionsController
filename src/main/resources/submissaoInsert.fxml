@@ -8,25 +8,40 @@
 <?import org.controlsfx.control.textfield.*?>
 
 <AnchorPane prefHeight="370.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/10.0.2-internal"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.submissaoUpdateController">
-    <ScrollPane prefHeight="389.0" prefWidth="467.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.submissaoInsertController">
+    <ScrollPane prefHeight="370.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                 AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <VBox fx:id="vboxTop" alignment="TOP_CENTER" prefWidth="451.0">
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
             </padding>
+            <!-- Radios -->
+            <VBox prefHeight="58.0" prefWidth="423.0">
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                    <RadioButton fx:id="radioArtigo" mnemonicParsing="false" text="Artigo"/>
+                    <RadioButton fx:id="radioMonografia" mnemonicParsing="false" text="Monografia"/>
+                    <RadioButton fx:id="radioRelatorioTecnico" mnemonicParsing="false"
+                                 text="Relatório Técnico"/>
+                    <RadioButton fx:id="radioResumo" mnemonicParsing="false" text="Resumo"/>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                    <RadioButton fx:id="radioMinicurso" mnemonicParsing="false" text="Minicurso"/>
+                    <RadioButton fx:id="radioPalestra" mnemonicParsing="false" text="Palestra"/>
+                </HBox>
+            </VBox>
             <!-- Submissao.class -->
-            <GridPane alignment="TOP_CENTER" hgap="20.0">
+            <GridPane fx:id="gridSubmissao" alignment="TOP_CENTER" hgap="20.0">
                 <columnConstraints>
-                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="168.0" minWidth="10.0"
-                                       prefWidth="87.0"/>
-                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="SOMETIMES" maxWidth="248.0"
-                                       minWidth="10.0" prefWidth="114.0"/>
+                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="168.0"
+                                       minWidth="10.0" prefWidth="87.0"/>
+                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="SOMETIMES"
+                                       maxWidth="248.0" minWidth="10.0" prefWidth="114.0"/>
                 </columnConstraints>
                 <rowConstraints>
                     <RowConstraints minHeight="40.0" vgrow="SOMETIMES"/>
                     <RowConstraints minHeight="40.0" vgrow="SOMETIMES"/>
-                    <RowConstraints fillHeight="false" minHeight="100.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    <RowConstraints fillHeight="false" minHeight="100.0" prefHeight="30.0"
+                                    vgrow="SOMETIMES"/>
                 </rowConstraints>
                 <VBox.margin>
                     <Insets/>
@@ -38,9 +53,9 @@
                            GridPane.rowIndex="1"/>
                 <Label layoutX="10.0" layoutY="47.0" text="Autor(es)" GridPane.halignment="RIGHT"
                        GridPane.rowIndex="2"/>
-                <VBox fx:id="vboxAutores" alignment="CENTER_LEFT" fillWidth="false" minHeight="-Infinity"
-                      prefHeight="97.0" prefWidth="223.0" GridPane.columnIndex="1" GridPane.rowIndex="2"
-                      GridPane.vgrow="ALWAYS">
+                <VBox fx:id="vboxAutores" alignment="CENTER_LEFT" fillWidth="false"
+                      minHeight="-Infinity" prefHeight="97.0" prefWidth="223.0" GridPane.columnIndex="1"
+                      GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">
                     <GridPane.margin>
                         <Insets/>
                     </GridPane.margin>
@@ -58,10 +73,10 @@
             <GridPane fx:id="gridCientifica" alignment="TOP_CENTER" hgap="20.0" layoutY="20.0"
                       prefHeight="116.0" prefWidth="282.0">
                 <columnConstraints>
-                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="168.0" minWidth="10.0"
-                                       prefWidth="87.0"/>
-                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="248.0" minWidth="10.0"
-                                       prefWidth="114.0"/>
+                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="168.0"
+                                       minWidth="10.0" prefWidth="87.0"/>
+                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="248.0"
+                                       minWidth="10.0" prefWidth="114.0"/>
                 </columnConstraints>
                 <rowConstraints>
                     <RowConstraints minHeight="100.0" vgrow="SOMETIMES"/>
@@ -93,7 +108,8 @@
                 </VBox>
                 <VBox fx:id="vboxInstituicoes" alignment="CENTER_LEFT" fillWidth="false"
                       GridPane.columnIndex="1">
-                    <CustomTextField fx:id="textFieldInstituicao" promptText="Digite uma instituição">
+                    <CustomTextField fx:id="textFieldInstituicao"
+                                     promptText="Digite uma instituição">
                         <VBox.margin>
                             <Insets bottom="5.0" top="5.0"/>
                         </VBox.margin>
@@ -106,10 +122,10 @@
             <!-- Submissao apresentacao -->
             <GridPane fx:id="gridApresentacao" alignment="TOP_CENTER" hgap="20.0" layoutY="20.0" vgap="10">
                 <columnConstraints>
-                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="168.0" minWidth="10.0"
-                                       prefWidth="87.0"/>
-                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="248.0" minWidth="10.0"
-                                       prefWidth="114.0"/>
+                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="168.0"
+                                       minWidth="10.0" prefWidth="87.0"/>
+                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="248.0"
+                                       minWidth="10.0" prefWidth="114.0"/>
                 </columnConstraints>
                 <rowConstraints>
                     <RowConstraints minHeight="40.0" vgrow="SOMETIMES"/>
@@ -137,8 +153,8 @@
                 <TextArea wrapText="true" fx:id="textAreaAbstract" prefHeight="200.0" prefWidth="200.0"
                           GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                 <Slider fx:id="sliderDuracao" blockIncrement="5.0" majorTickUnit="10.0" max="180.0"
-                        min="10.0" minorTickCount="5" showTickLabels="true" snapToTicks="true" value="5.0"
-                        GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        min="10.0" minorTickCount="5" showTickLabels="true" snapToTicks="true"
+                        value="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                     <GridPane.margin>
                         <Insets bottom="10.0"/>
                     </GridPane.margin>
@@ -147,10 +163,10 @@
             <!-- Específicas -->
             <GridPane fx:id="gridEspecifica" alignment="TOP_CENTER" hgap="20.0" vgap="10.0">
                 <columnConstraints>
-                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="168.0" minWidth="10.0"
-                                       prefWidth="87.0"/>
-                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="248.0" minWidth="10.0"
-                                       prefWidth="114.0"/>
+                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="168.0"
+                                       minWidth="10.0" prefWidth="87.0"/>
+                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="248.0"
+                                       minWidth="10.0" prefWidth="114.0"/>
                 </columnConstraints>
                 <rowConstraints>
                     <RowConstraints minHeight="40.0" vgrow="SOMETIMES"/>
@@ -196,7 +212,7 @@
     </ScrollPane>
     <Group layoutX="173.0" layoutY="158.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="25.671875">
         <Button fx:id="btnConfirmar" layoutX="129.0" layoutY="137.0" mnemonicParsing="false" text="Confirmar"/>
-        <Button fx:id="closeButton" layoutX="207.0" layoutY="138.0" mnemonicParsing="false" onAction="#closeDialog"
-                text="Cancelar"/>
+        <Button fx:id="closeButton" layoutX="207.0" layoutY="138.0" mnemonicParsing="false"
+                onAction="#closeDialog" text="Cancelar"/>
     </Group>
 </AnchorPane>

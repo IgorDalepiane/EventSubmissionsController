@@ -2,6 +2,7 @@ package submissao.categorias;
 
 import submissao.SubmissaoCientifica;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 
@@ -10,7 +11,10 @@ import javax.persistence.PrimaryKeyJoinColumn;
 public class RelatorioTecnico extends SubmissaoCientifica {
     private int ano;
     private int nPaginas;
+
+    @Column(columnDefinition = "TEXT")
     private String resumo;
+    @Column(name = "abstract", columnDefinition = "TEXT")
     private String _abstract;
 
     public RelatorioTecnico() {
@@ -51,16 +55,14 @@ public class RelatorioTecnico extends SubmissaoCientifica {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder(super.toString());
-        result.append("\n\nAno: ")
-                .append(ano)
-                .append("\n\nNº Páginas: ")
-                .append(nPaginas)
-                .append("\n\nResumo: ")
-                .append(resumo)
-                .append("\n\nAbstract: ")
-                .append(_abstract);
 
-        return result.toString();
+        return super.toString() + "\n\nAno: " +
+                ano +
+                "\n\nNº Páginas: " +
+                nPaginas +
+                "\n\nResumo: " +
+                resumo +
+                "\n\nAbstract: " +
+                _abstract;
     }
 }

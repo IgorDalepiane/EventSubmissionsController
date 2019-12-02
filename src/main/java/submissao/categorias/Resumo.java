@@ -12,8 +12,4 @@ public class Resumo extends SubmissaoCientifica {
         super(8, 8, 4);
     }
 
-    @Override
-    public String toString() {
-        return super.toString();
-    }
 }

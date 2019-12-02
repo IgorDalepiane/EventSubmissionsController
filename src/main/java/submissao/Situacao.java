@@ -1,5 +1,5 @@
 package submissao;
 
 public enum Situacao {
-    APROVADO, REPROVADO, SOB_AVALIACAO;
+    APROVADO, REPROVADO, SOB_AVALIACAO
 }

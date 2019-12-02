@@ -92,13 +92,11 @@ public abstract class Submissao {
     }
 
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        result.append("Título: ")
-                .append(titulo)
-                .append("\n\nSituação: ")
-                .append(situacao)
-                .append("\n\nAutor(es): ")
-                .append(getAutoresString());
-        return result.toString();
+        return "Título: " +
+                titulo +
+                "\n\nSituação: " +
+                situacao +
+                "\n\nAutor(es): " +
+                getAutoresString();
     }
 }

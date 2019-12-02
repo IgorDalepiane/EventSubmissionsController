@@ -1,5 +1,5 @@
 package submissao.categorias;
 
 public enum Tipo {
-    TCC1, TCC2;
+    TCC1, TCC2
 }

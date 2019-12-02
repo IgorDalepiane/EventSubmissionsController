@@ -1,9 +1,8 @@
-package UI.sub;
+package UI;
 
 
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -112,20 +111,20 @@ public class submissaoController implements Initializable {
         }
     }
 
-    public void inserirDialog(ActionEvent actionEvent) throws IOException {
-        AnchorPane anchor = FXMLLoader.load(submissaoController.class.getResource("/sub/submissaoTipo.fxml"));
+    public void inserirDialog() throws IOException {
+        AnchorPane anchor = FXMLLoader.load(submissaoController.class.getResource("/submissaoInsert.fxml"));
 
         Stage dialogStage = new Stage();
-        dialogStage.setTitle("Escolha o tipo de submissão");
+        dialogStage.setTitle("Nova submissão");
 
         Scene scene = new Scene(anchor);
         dialogStage.setScene(scene);
-        dialogStage.show();
+        dialogStage.showAndWait();
 
         refresh();
     }
 
-    public void alterarDialog(ActionEvent actionEvent) throws IOException {
+    public void alterarDialog() throws IOException {
         Submissao selecionado = tableLeft.getSelectionModel().getSelectedItem();
 
         if (selecionado != null) {
@@ -148,7 +147,7 @@ public class submissaoController implements Initializable {
         refresh();
     }
 
-    public void removerDialog(ActionEvent actionEvent) {
+    public void removerDialog() {
         try {
             Submissao sub = tableLeft.getSelectionModel().getSelectedItem();
             if (sub != null) {

@@ -2,6 +2,7 @@ package submissao.categorias;
 
 import submissao.SubmissaoCientifica;
 
+import javax.persistence.Column;
 import javax.persistence.PrimaryKeyJoinColumn;
 
 import javax.persistence.Entity;
@@ -14,7 +15,9 @@ public class Monografia extends SubmissaoCientifica {
     private String curso;
     private int ano;
     private int nPaginas;
+    @Column(columnDefinition = "TEXT")
     private String resumo;
+    @Column(columnDefinition = "TEXT")
     private String _abstract;
 
     public Monografia() {
@@ -79,22 +82,21 @@ public class Monografia extends SubmissaoCientifica {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder(super.toString());
-        result.append("\n\nTipo: ")
-                .append(tipo)
-                .append("\n\nOrientador: ")
-                .append(orientador)
-                .append("\n\nCurso: ")
-                .append(curso)
-                .append("\n\nAno: ")
-                .append(ano)
-                .append("\n\nNº Páginas: ")
-                .append(nPaginas)
-                .append("\n\nResumo: ")
-                .append(resumo)
-                .append("\n\nAbstract: ")
-                .append(_abstract);
 
-        return result.toString();
+        return super.toString() +
+                "\n\nTipo: " +
+                tipo +
+                "\n\nOrientador: " +
+                orientador +
+                "\n\nCurso: " +
+                curso +
+                "\n\nAno: " +
+                ano +
+                "\n\nNº Páginas: " +
+                nPaginas +
+                "\n\nResumo: " +
+                resumo +
+                "\n\nAbstract: " +
+                _abstract;
     }
 }

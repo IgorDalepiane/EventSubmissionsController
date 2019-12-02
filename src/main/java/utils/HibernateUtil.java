@@ -6,7 +6,6 @@ import submissao.Submissao;
 import submissao.SubmissaoApresentacao;
 import submissao.SubmissaoCientifica;
 import submissao.categorias.*;
-import submissao.embeddables.Autor;
 
 
 public class HibernateUtil {
@@ -19,7 +18,6 @@ public class HibernateUtil {
                     .addAnnotatedClass(Submissao.class)
                     .addAnnotatedClass(SubmissaoApresentacao.class)
                     .addAnnotatedClass(SubmissaoCientifica.class)
-                    .addAnnotatedClass(Autor.class)
                     .addAnnotatedClass(Palestra.class)
                     .addAnnotatedClass(Artigo.class)
                     .addAnnotatedClass(Resumo.class)

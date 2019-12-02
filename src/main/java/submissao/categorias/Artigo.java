@@ -1,16 +1,18 @@
 package submissao.categorias;
 
-import org.hibernate.annotations.GenericGenerator;
 import submissao.SubmissaoCientifica;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
 public class Artigo extends SubmissaoCientifica {
+    @Column(columnDefinition = "TEXT")
     private String resumo;
 
-    @Column(name = "abstract")
+    @Column(name = "abstract", columnDefinition = "TEXT")
     private String _abstract;
 
     public Artigo() {
@@ -35,11 +37,10 @@ public class Artigo extends SubmissaoCientifica {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder(super.toString());
-        result.append("\n\nResumo: ")
-                .append(resumo)
-                .append("\n\nAbstract: ")
-                .append(_abstract);
-        return result.toString();
+        return super.toString() +
+                "\n\nResumo: " +
+                resumo +
+                "\n\nAbstract: " +
+                _abstract;
     }
 }
