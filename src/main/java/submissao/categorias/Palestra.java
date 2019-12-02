@@ -11,7 +11,7 @@ public class Palestra extends SubmissaoApresentacao {
     private String curriculo;
 
     public Palestra() {
-        super();
+        super(1);
     }
 
     public String getCurriculo() {

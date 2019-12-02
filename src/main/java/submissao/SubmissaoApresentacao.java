@@ -10,10 +10,11 @@ public abstract class SubmissaoApresentacao extends Submissao {
 
     @Column(name = "abstract")
     private String _abstract;
+
     private int duracao; // minutos
 
-    public SubmissaoApresentacao() {
-        super();
+    public SubmissaoApresentacao(int max) {
+        super(max);
     }
 
     public String getResumo() {

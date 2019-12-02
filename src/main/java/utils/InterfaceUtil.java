@@ -1,6 +1,7 @@
 package utils;
 
 import UI.indexController;
+import UI.sub.submissaoController;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Alert;
@@ -15,7 +16,7 @@ public class InterfaceUtil extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        indexController.showView();
+        submissaoController.showView();
         stage.setResizable(false);
         stage.show();
         center();

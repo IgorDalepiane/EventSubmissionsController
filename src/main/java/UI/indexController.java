@@ -38,13 +38,8 @@ public class indexController implements Initializable {
     }
 
 
-    public void handleAutor(ActionEvent actionEvent) throws IOException {
-        AnchorPane root = FXMLLoader.load(getClass().getResource("/aut/autor.fxml"));
-        anchor.getChildren().setAll(root);
-    }
-
     public void handleSubmissao(ActionEvent actionEvent) throws IOException {
-        AnchorPane root = FXMLLoader.load(getClass().getResource("/sub/submissao.fxml"));
+        AnchorPane root = FXMLLoader.load(getClass().getResource("/submissao.fxml"));
         anchor.getChildren().setAll(root);
     }
 }

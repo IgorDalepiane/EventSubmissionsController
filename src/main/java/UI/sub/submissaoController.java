@@ -1,23 +1,23 @@
 package UI.sub;
 
+
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import submissao.Submissao;
-import submissao.categorias.Palestra;
 import utils.HibernateUtil;
 import utils.InterfaceUtil;
 
@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class submissaoController implements Initializable {
+    private static Scene scene;
 
     //tabela lateral esquerda
     @FXML
@@ -50,9 +51,7 @@ public class submissaoController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) { //carrega os valores na tabela à esquerda
-
-        flSub = new FilteredList<>(FXCollections.observableArrayList(listar()), p -> true);
-        tableLeft.setItems(flSub);
+        refresh();
 
         tableColumnTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         tableColumnTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
@@ -60,7 +59,16 @@ public class submissaoController implements Initializable {
         tableLeft.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> textflow(newValue));
 
-        choiceBox.getItems().addAll("Tipo", "Título", "Autor");
+        initPesquisa();
+    }
+
+    private void refresh() {
+        flSub = new FilteredList<>(FXCollections.observableArrayList(listar()), p -> true);
+        tableLeft.setItems(flSub);
+    }
+
+    private void initPesquisa() {
+        choiceBox.getItems().setAll("Tipo", "Título", "Autor");
         choiceBox.setValue("Título");
 
         textField.setPromptText("Pesquise aqui!");
@@ -72,6 +80,7 @@ public class submissaoController implements Initializable {
                             .contains(textField.getText().toLowerCase().trim()));
                     break;
                 case "Título":
+                    System.out.println(keyEvent.getCode());
                     flSub.setPredicate(sub -> sub.getTitulo()
                             .toLowerCase()
                             .contains(textField.getText().toLowerCase().trim()));
@@ -104,37 +113,39 @@ public class submissaoController implements Initializable {
     }
 
     public void inserirDialog(ActionEvent actionEvent) throws IOException {
-        AnchorPane anchor = FXMLLoader.load(submissaoController.class.getResource("/sub/submissaoInsert.fxml"));
+        AnchorPane anchor = FXMLLoader.load(submissaoController.class.getResource("/sub/submissaoTipo.fxml"));
 
         Stage dialogStage = new Stage();
-        dialogStage.setTitle("Nova Submissão");
+        dialogStage.setTitle("Escolha o tipo de submissão");
 
         Scene scene = new Scene(anchor);
         dialogStage.setScene(scene);
-        dialogStage.showAndWait();
+        dialogStage.show();
 
-        tableLeft.setItems(FXCollections.observableArrayList(listar()));
+        refresh();
     }
 
     public void alterarDialog(ActionEvent actionEvent) throws IOException {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/aut/autorUpdate.fxml"));
-//
-//        Stage dialogStage = new Stage();
-//        dialogStage.setTitle("Edição de Autor");
-//
-//        Scene scene = new Scene(loader.load());
-//        dialogStage.setScene(scene);
-//
-//        autorUpdateController upCtrl = loader.getController();
-//        Autor selecionado = tableLeft.getSelectionModel().getSelectedItem();
-//        if (selecionado != null) {
-//            upCtrl.initAutor(selecionado);
-//            dialogStage.showAndWait();
-//        } else {
-//            InterfaceUtil.erro("Selecione um autor");
-//        }
-//
-//        tableLeft.setItems(FXCollections.observableArrayList(listar()));
+        Submissao selecionado = tableLeft.getSelectionModel().getSelectedItem();
+
+        if (selecionado != null) {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    "/submissaoUpdate.fxml"));
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Edição de " + selecionado.getClass().getSimpleName());
+
+            Scene scene = new Scene(loader.load());
+            dialogStage.setScene(scene);
+
+            submissaoUpdateController upCtrl = loader.getController();
+            upCtrl.init(selecionado);
+            dialogStage.showAndWait();
+            refresh();
+        } else
+            InterfaceUtil.erro("Selecione uma submissão.");
+
+        refresh();
     }
 
     public void removerDialog(ActionEvent actionEvent) {
@@ -151,10 +162,12 @@ public class submissaoController implements Initializable {
                     session.getTransaction().commit();
                     session.close();
 
-                    tableLeft.setItems(FXCollections.observableArrayList(listar()));
+                    refresh();
                     InterfaceUtil.sucesso("Submissão apagada com sucesso.");
                 }
-            }
+            } else
+                InterfaceUtil.erro("Selecione uma submissão.");
+
         } catch (HibernateException e) {
             InterfaceUtil.erro(e.getMessage());
         }
@@ -175,5 +188,19 @@ public class submissaoController implements Initializable {
             InterfaceUtil.erro(e.getMessage());
             return null;
         }
+    }
+
+    /**
+     * Carrega o arquivo fxml e define a scene (View)
+     *
+     * @throws IOException
+     */
+    public static void showView() throws IOException {
+        Parent root = FXMLLoader.load(submissaoController.class.getResource("/submissao.fxml"));
+        if (scene == null)
+            scene = new Scene(root, 600, 370);
+        InterfaceUtil.stage.setTitle("Gerenciador de Submissões");
+        InterfaceUtil.stage.setScene(scene);
+        InterfaceUtil.center();
     }
 }

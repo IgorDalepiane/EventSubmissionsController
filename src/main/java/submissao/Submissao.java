@@ -3,7 +3,8 @@ package submissao;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.hibernate.annotations.GenericGenerator;
-import submissao.embeddables.Autor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -21,13 +22,14 @@ public abstract class Submissao {
 
     private Situacao situacao;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Autor> autores = new ArrayList<>();
+    @ElementCollection
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<String> autores = new ArrayList<>();
 
-    private int maxAut;
+    private final int MAX_AUTORES;
 
-    public Submissao() {
-
+    Submissao(int max) {
+        MAX_AUTORES = max;
     }
 
     public Long getId() {
@@ -38,34 +40,29 @@ public abstract class Submissao {
         this.id = id;
     }
 
-    public List<Autor> getAutores() {
+    public List<String> getAutores() {
         return autores;
     }
 
     public String getAutoresInline() {
         StringBuilder result = new StringBuilder();
-        for (Autor a:
-             autores) {
-            result.append(a.getNome());
-        }
+        for (String a : autores)
+            result.append(a);
         return result.toString();
     }
 
     public String getAutoresString() {
         StringBuilder result = new StringBuilder();
-        for (Autor a :
-                autores) {
+        for (String a : autores)
             //é o último
             if (a.equals(autores.get(autores.size() - 1)))
-                result.append(a.getNome());
-            else {
-                result.append(a.getNome()).append(", ");
-            }
-        }
+                result.append(a);
+            else
+                result.append(a).append(", ");
         return result.toString();
     }
 
-    public void setAutores(List<Autor> autores) {
+    public void setAutores(List<String> autores) {
         this.autores = autores;
     }
 
@@ -85,12 +82,8 @@ public abstract class Submissao {
         this.situacao = situacao;
     }
 
-    public int getMaxAut() {
-        return maxAut;
-    }
-
-    public void setMaxAut(int maxAut) {
-        this.maxAut = maxAut;
+    public int getMAX_AUTORES() {
+        return MAX_AUTORES;
     }
 
     //reflection para popular a table
@@ -104,10 +97,8 @@ public abstract class Submissao {
                 .append(titulo)
                 .append("\n\nSituação: ")
                 .append(situacao)
-                .append("\n\nAutores: ")
-                .append(getAutoresString())
-                .append("\n\nMax autores: ")
-                .append(maxAut);
+                .append("\n\nAutor(es): ")
+                .append(getAutoresString());
         return result.toString();
     }
 }

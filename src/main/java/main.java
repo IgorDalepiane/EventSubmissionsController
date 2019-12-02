@@ -1,13 +1,17 @@
 
+import submissao.Submissao;
+import submissao.SubmissaoApresentacao;
+import submissao.SubmissaoCientifica;
+import submissao.categorias.*;
 import utils.HibernateUtil;
 import utils.InterfaceUtil;
 import javafx.application.Application;
 import org.hibernate.Session;
 import submissao.Situacao;
-import submissao.categorias.Palestra;
 import submissao.embeddables.Autor;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class main {
@@ -15,48 +19,80 @@ public class main {
     public static void main(String[] args) {
         HibernateUtil.buildSessionFactory();
 
-        for (int i = 0; i < 2; i++) {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
+        Session sessionj = HibernateUtil.getSessionFactory().getCurrentSession();
+        sessionj.beginTransaction();
 
-            Autor a = new Autor();
-            a.setNome("nomeA" + i);
-            a.setUniversidade("uniA" + i);
+        Submissao obj;
 
-            Autor b = new Autor();
-            b.setNome("nomeB" + i);
-            b.setUniversidade("uniB" + i);
+        obj = new Artigo();
+        obj.setTitulo("artigo");
+        obj.setSituacao(Situacao.APROVADO);
+        obj.setAutores(Collections.singletonList("autorre"));
+        ((SubmissaoCientifica) obj).setInstituicao(Arrays.asList("UFRGS", "Unichamps"));
+        ((SubmissaoCientifica) obj).setPalavraChave(Arrays.asList("software", "web"));
+        ((Artigo) obj).setResumo("Resumo do artigo");
+        ((Artigo) obj).set_abstract("Abstract of the article");
+        sessionj.save(obj);
 
-            session.save(a);
-            session.save(b);
+        obj = new Minicurso();
+        obj.setTitulo("artigo");
+        obj.setSituacao(Situacao.APROVADO);
+        obj.setAutores(Collections.singletonList("autorre"));
+        ((SubmissaoApresentacao) obj).setResumo("Resumo da palestraaaaa");
+        ((SubmissaoApresentacao) obj).set_abstract("Abstract of the talk");
+        ((SubmissaoApresentacao) obj).setDuracao(120);
+        ((Minicurso) obj).setRecursos("RECURSOS");
+        ((Minicurso) obj).setMetodologia("METODOLOGIA");
+        sessionj.save(obj);
 
-            session.getTransaction().commit();
-            session.close();
+        obj = new Palestra();
+        obj.setTitulo("paleasretsd");
+        obj.setSituacao(Situacao.APROVADO);
+        obj.setAutores(Collections.singletonList("autorre"));
+        ((SubmissaoApresentacao) obj).setResumo("Resumo da palestraaaaa");
+        ((SubmissaoApresentacao) obj).set_abstract("Abstract of the talk");
+        ((SubmissaoApresentacao) obj).setDuracao(120);
+        ((Palestra) obj).setCurriculo("awdadadawd");
+        sessionj.save(obj);
 
-            for (int j = 0; j < 2; j++) {
-                Session sessionj = HibernateUtil.getSessionFactory().getCurrentSession();
-                sessionj.beginTransaction();
+        obj = new Monografia();
+        obj.setTitulo("mosdnfods");
+        obj.setSituacao(Situacao.APROVADO);
+        obj.setAutores(Collections.singletonList("autorre"));
+        ((SubmissaoCientifica) obj).setInstituicao(Arrays.asList("UFRGS", "Unichamps"));
+        ((SubmissaoCientifica) obj).setPalavraChave(Arrays.asList("software", "web"));
+        ((Monografia) obj).setTipo(Tipo.TCC1);
+        ((Monografia) obj).setOrientador("AWDAWD");
+        ((Monografia) obj).setnPaginas(5);
+        ((Monografia) obj).setCurso("ADAWDWADWADQQQQQ");
+        ((Monografia) obj).setAno(12312);
+        ((Monografia) obj).setResumo("AWDWAWAEEEDFDF");
+        ((Monografia) obj).set_abstract("Abstract of the article");
+        sessionj.save(obj);
 
-                Palestra p = new Palestra();
-                //Submissao.class
-                p.setTitulo("titulo" + i + "_" + j);
-                p.setSituacao(Situacao.SOB_AVALIACAO);
-                p.setAutores(Arrays.asList(a, b));
-                p.setMaxAut(2);
-                //SubmissaoApresentacao.class
-                p.setResumo("Resumo da palestraaaaa" + i + "_" + j);
-                p.set_abstract("Abstract of the talk" + i + "_" + j);
-                p.setDuracao(120);
-                //Palestra.class
-                p.setCurriculo("Curriculo da palestraaiaiiaiia" + i + "_" + j);
-                sessionj.save(p);
+        obj = new RelatorioTecnico();
+        obj.setTitulo("rearawdwa");
+        obj.setSituacao(Situacao.APROVADO);
+        obj.setAutores(Collections.singletonList("autorre"));
+        ((SubmissaoCientifica) obj).setInstituicao(Arrays.asList("UFRGS", "Unichamps"));
+        ((SubmissaoCientifica) obj).setPalavraChave(Arrays.asList("software", "web"));
+        ((RelatorioTecnico) obj).setAno(324);
+        ((RelatorioTecnico) obj).setnPaginas(2324);
+        ((RelatorioTecnico) obj).setResumo("awdqqqqqq");
+        ((RelatorioTecnico) obj).set_abstract("Abstract of the article");
+        sessionj.save(obj);
 
-                sessionj.getTransaction().commit();
-                sessionj.close();
-            }
+        obj = new Resumo();
+        obj.setTitulo("resumo");
+        obj.setSituacao(Situacao.APROVADO);
+        obj.setAutores(Collections.singletonList("autorre"));
+        ((SubmissaoCientifica) obj).setInstituicao(Arrays.asList("UFRGS", "Unichamps"));
+        ((SubmissaoCientifica) obj).setPalavraChave(Arrays.asList("software", "web"));
+        sessionj.save(obj);
 
+        sessionj.getTransaction().commit();
+        sessionj.close();
 
-        }
         Application.launch(InterfaceUtil.class);
     }
 }
