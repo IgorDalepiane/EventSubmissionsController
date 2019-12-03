@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.controlsfx.control.*?>
+<?import org.controlsfx.control.textfield.*?>
+
+<AnchorPane prefHeight="370.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/10.0.2-internal"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.submissaoUpdateController">
+    <ScrollPane prefHeight="389.0" prefWidth="467.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <VBox fx:id="vboxTop" alignment="TOP_CENTER" prefWidth="451.0">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+            </padding>
+            <!-- Submissao.class -->
+            <GridPane alignment="TOP_CENTER" hgap="20.0">
+                <columnConstraints>
+                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="168.0" minWidth="10.0"
+                                       prefWidth="87.0"/>
+                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="SOMETIMES" maxWidth="248.0"
+                                       minWidth="10.0" prefWidth="114.0"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="40.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="40.0" vgrow="SOMETIMES"/>
+                    <RowConstraints fillHeight="false" minHeight="100.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                </rowConstraints>
+                <VBox.margin>
+                    <Insets/>
+                </VBox.margin>
+                <Label text="Título" GridPane.halignment="RIGHT" GridPane.rowIndex="0"/>
+                <Label text="Situação" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+                <TextField fx:id="textFieldTitulo" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <ChoiceBox fx:id="choiceBoxSituacao" prefWidth="150.0" GridPane.columnIndex="1"
+                           GridPane.rowIndex="1"/>
+                <Label layoutX="10.0" layoutY="47.0" text="Autor(es)" GridPane.halignment="RIGHT"
+                       GridPane.rowIndex="2"/>
+                <VBox fx:id="vboxAutores" alignment="CENTER_LEFT" fillWidth="false" minHeight="-Infinity"
+                      prefHeight="97.0" prefWidth="223.0" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                      GridPane.vgrow="ALWAYS">
+                    <GridPane.margin>
+                        <Insets/>
+                    </GridPane.margin>
+                    <CustomTextField fx:id="textFieldAutor" promptText="Digite um autor">
+                        <VBox.margin>
+                            <Insets bottom="5.0" top="5.0"/>
+                        </VBox.margin>
+                    </CustomTextField>
+                    <CheckListView fx:id="autores" maxHeight="-Infinity">
+
+                    </CheckListView>
+                </VBox>
+            </GridPane>
+            <!-- Submissao cientifica -->
+            <GridPane fx:id="gridCientifica" alignment="TOP_CENTER" hgap="20.0" layoutY="20.0"
+                      prefHeight="116.0" prefWidth="282.0">
+                <columnConstraints>
+                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="168.0" minWidth="10.0"
+                                       prefWidth="87.0"/>
+                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="248.0" minWidth="10.0"
+                                       prefWidth="114.0"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="100.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="100.0" vgrow="SOMETIMES"/>
+                </rowConstraints>
+                <VBox.margin>
+                    <Insets/>
+                </VBox.margin>
+                <Label text="Instituições" GridPane.halignment="RIGHT"/>
+                <Label text="Palavras-chave" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                    <GridPane.margin>
+                        <Insets bottom="10.0"/>
+                    </GridPane.margin>
+                </Label>
+                <VBox fx:id="vboxPalavraschave" alignment="CENTER_LEFT" fillWidth="false"
+                      GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <GridPane.margin>
+                        <Insets bottom="10.0"/>
+                    </GridPane.margin>
+                    <CustomTextField fx:id="textFieldPalavraschave"
+                                     promptText="Digite uma palavra chave">
+                        <VBox.margin>
+                            <Insets bottom="5.0" top="5.0"/>
+                        </VBox.margin>
+                    </CustomTextField>
+                    <CheckListView fx:id="palavraschave" maxHeight="-Infinity">
+
+                    </CheckListView>
+                </VBox>
+                <VBox fx:id="vboxInstituicoes" alignment="CENTER_LEFT" fillWidth="false"
+                      GridPane.columnIndex="1">
+                    <CustomTextField fx:id="textFieldInstituicao" promptText="Digite uma instituição">
+                        <VBox.margin>
+                            <Insets bottom="5.0" top="5.0"/>
+                        </VBox.margin>
+                    </CustomTextField>
+                    <CheckListView fx:id="instituicoes" maxHeight="-Infinity">
+
+                    </CheckListView>
+                </VBox>
+            </GridPane>
+            <!-- Submissao apresentacao -->
+            <GridPane fx:id="gridApresentacao" alignment="TOP_CENTER" hgap="20.0" layoutY="20.0" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="168.0" minWidth="10.0"
+                                       prefWidth="87.0"/>
+                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="248.0" minWidth="10.0"
+                                       prefWidth="114.0"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="40.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="40.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="40.0" vgrow="SOMETIMES"/>
+                </rowConstraints>
+                <Label text="Resumo" GridPane.halignment="RIGHT">
+                    <GridPane.margin>
+                        <Insets top="10.0"/>
+                    </GridPane.margin>
+                </Label>
+                <Label text="Abstract" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+
+                <Label text="Duração" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                    <GridPane.margin>
+                        <Insets bottom="10.0"/>
+                    </GridPane.margin>
+                </Label>
+                <TextArea wrapText="true" fx:id="textAreaResumo" prefHeight="200.0" prefWidth="200.0"
+                          GridPane.columnIndex="1">
+                    <GridPane.margin>
+                        <Insets top="10.0"/>
+                    </GridPane.margin>
+                </TextArea>
+                <TextArea wrapText="true" fx:id="textAreaAbstract" prefHeight="200.0" prefWidth="200.0"
+                          GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <Slider fx:id="sliderDuracao" blockIncrement="5.0" majorTickUnit="10.0" max="180.0"
+                        min="10.0" minorTickCount="5" showTickLabels="true" snapToTicks="true" value="5.0"
+                        GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <GridPane.margin>
+                        <Insets bottom="10.0"/>
+                    </GridPane.margin>
+                </Slider>
+            </GridPane>
+            <!-- Específicas -->
+            <GridPane fx:id="gridEspecifica" alignment="TOP_CENTER" hgap="20.0" vgap="10.0">
+                <columnConstraints>
+                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="168.0" minWidth="10.0"
+                                       prefWidth="87.0"/>
+                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="248.0" minWidth="10.0"
+                                       prefWidth="114.0"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="40.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="40.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="40.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="40.0" vgrow="SOMETIMES"/>
+                    <RowConstraints/>
+                    <RowConstraints/>
+                    <RowConstraints/>
+                    <RowConstraints/>
+                    <RowConstraints/>
+                    <RowConstraints/>
+                </rowConstraints>
+                <Label fx:id="spResumoLabel" text="Resumo" GridPane.halignment="RIGHT"/>
+                <Label fx:id="spAbstractLabel" text="Abstract" GridPane.halignment="RIGHT"/>
+                <Label fx:id="spRecursosLabel" text="Recursos" GridPane.halignment="RIGHT"/>
+                <Label fx:id="spMetodologiaLabel" text="Metodologia" GridPane.halignment="RIGHT"/>
+                <Label fx:id="spTipoLabel" text="Tipo" GridPane.halignment="RIGHT"/>
+                <Label fx:id="spOrientadorLabel" text="Orientador" GridPane.halignment="RIGHT"/>
+                <Label fx:id="spCursoLabel" text="Curso" GridPane.halignment="RIGHT"/>
+                <Label fx:id="spAnoLabel" text="Ano" GridPane.halignment="RIGHT"/>
+                <Label fx:id="spNumPagsLabel" text="Número de páginas" GridPane.halignment="RIGHT"/>
+                <Label fx:id="spCurriculoLabel" text="Currículo" GridPane.halignment="RIGHT"/>
+                <TextArea wrapText="true" fx:id="spResumo" prefHeight="200.0" prefWidth="200.0"
+                          GridPane.columnIndex="1"/>
+                <TextArea wrapText="true" fx:id="spAbstract" prefHeight="200.0" prefWidth="200.0"
+                          GridPane.columnIndex="1"/>
+                <TextArea wrapText="true" fx:id="spRecursos" prefHeight="200.0" prefWidth="200.0"
+                          GridPane.columnIndex="1"/>
+                <TextArea wrapText="true" fx:id="spMetodologia" prefHeight="200.0" prefWidth="200.0"
+                          GridPane.columnIndex="1"/>
+                <ChoiceBox fx:id="spTipo" prefHeight="25.0" prefWidth="85.0" GridPane.columnIndex="1"
+                           GridPane.halignment="LEFT"/>
+                <TextField fx:id="spOrientador" GridPane.columnIndex="1"/>
+                <TextField fx:id="spCurso" GridPane.columnIndex="1"/>
+                <TextField fx:id="spAno" maxWidth="50.0" GridPane.columnIndex="1"
+                           GridPane.halignment="LEFT"/>
+                <TextField fx:id="spNumPags" maxWidth="50.0" GridPane.columnIndex="1"
+                           GridPane.halignment="LEFT"/>
+                <TextField fx:id="spCurriculo" GridPane.columnIndex="1"/>
+            </GridPane>
+        </VBox>
+    </ScrollPane>
+    <Group layoutX="173.0" layoutY="158.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="25.671875">
+        <Button fx:id="btnConfirmar" layoutX="129.0" layoutY="137.0" mnemonicParsing="false" text="Confirmar"/>
+        <Button fx:id="closeButton" layoutX="207.0" layoutY="138.0" mnemonicParsing="false" onAction="#closeDialog"
+                text="Cancelar"/>
+    </Group>
+</AnchorPane>

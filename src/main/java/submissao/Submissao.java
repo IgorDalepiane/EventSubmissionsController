@@ -1,62 +1,102 @@
 package submissao;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Submissao {
-    private String tituloSubmissao;
-    private Situacao situacaoSubmissao;
-    private String[] autoresSubmissao;
-    private int maxAut;
+    @Id
+    @GeneratedValue(generator = "increment")
+    @GenericGenerator(name = "increment", strategy = "increment")
+    private Long id;
 
-    public String getTituloSubmissao() {
-        return tituloSubmissao;
+    private String titulo;
+
+    private Situacao situacao;
+
+    @ElementCollection
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<String> autores = new ArrayList<>();
+
+    private final int MAX_AUTORES;
+
+    protected Submissao(int max) {
+        MAX_AUTORES = max;
     }
 
-    public void setTituloSubmissao(String tituloSubmissao) {
-        this.tituloSubmissao = tituloSubmissao;
+    public Long getId() {
+        return id;
     }
 
-    public Situacao getSituacaoSubmissao() {
-        return situacaoSubmissao;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setSituacaoSubmissao(Situacao situacaoSubmissao) {
-        this.situacaoSubmissao = situacaoSubmissao;
+    public List<String> getAutores() {
+        return autores;
     }
 
-    public String[] getAutoresSubmissao() {
-        return autoresSubmissao;
+    public String getAutoresInline() {
+        StringBuilder result = new StringBuilder();
+        for (String a : autores)
+            result.append(a);
+        return result.toString();
     }
 
-    public void setAutoresSubmissao(String[] autoresSubmissao) {
-        this.autoresSubmissao = autoresSubmissao;
+    public String getAutoresString() {
+        StringBuilder result = new StringBuilder();
+        for (String a : autores)
+            //é o último
+            if (a.equals(autores.get(autores.size() - 1)))
+                result.append(a);
+            else
+                result.append(a).append(", ");
+        return result.toString();
     }
 
-    public int getMaxAut() {
-        return maxAut;
+    public void setAutores(List<String> autores) {
+        this.autores = autores;
     }
 
-    public void setMaxAut(int maxAut) {
-        this.maxAut = maxAut;
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public Situacao getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(Situacao situacao) {
+        this.situacao = situacao;
+    }
+
+    public int getMAX_AUTORES() {
+        return MAX_AUTORES;
+    }
+
+    //reflection para popular a table
+    public StringProperty tipoProperty() {
+        return new SimpleStringProperty(this.getClass().getSimpleName());
     }
 
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        result.append("Título: ")
-                .append(tituloSubmissao)
-                .append(" Situação: ")
-                .append(situacaoSubmissao)
-                .append(" Autores: ");
-        for (String a :
-                autoresSubmissao) {
-            //é o último
-            if (a.equals(autoresSubmissao[autoresSubmissao.length - 1]))
-                result.append(a);
-            else {
-                result.append(a).append(", ");
-            }
-        }
-        result.append(" Max autores: ")
-                .append(maxAut);
-
-        return result.toString();
+        return "Título: " +
+                titulo +
+                "\n\nSituação: " +
+                situacao +
+                "\n\nAutor(es): " +
+                getAutoresString();
     }
 }

@@ -1,5 +1,5 @@
 package submissao.categorias;
 
 public enum Tipo {
-    PESQUISA, COMPILACAO, CIENTIFICA;
+    TCC1, TCC2
 }

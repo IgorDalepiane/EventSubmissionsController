@@ -1,7 +1,10 @@
-import submissao.SubmissaoCientifica;
+import javafx.application.Application;
+import utils.HibernateUtil;
+import utils.InterfaceUtil;
 
-public class main {
+class main {
     public static void main(String[] args) {
-
+        HibernateUtil.buildSessionFactory();
+        Application.launch(InterfaceUtil.class);
     }
 }
