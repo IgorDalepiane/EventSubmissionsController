@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
+
 public class Monografia extends SubmissaoCientifica {
     private Tipo tipo;
     private String orientador;

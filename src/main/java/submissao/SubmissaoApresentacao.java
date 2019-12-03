@@ -1,5 +1,4 @@
 package submissao;
-
 import javax.persistence.*;
 
 @Entity
@@ -51,5 +50,6 @@ public abstract class SubmissaoApresentacao extends Submissao {
                 "\n\nDuração: " +
                 duracao +
                 "min";
+
     }
 }

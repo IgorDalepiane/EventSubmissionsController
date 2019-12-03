@@ -9,6 +9,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
 public class Artigo extends SubmissaoCientifica {
+
     @Column(columnDefinition = "TEXT")
     private String resumo;
 

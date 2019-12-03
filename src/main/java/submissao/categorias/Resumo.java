@@ -11,5 +11,4 @@ public class Resumo extends SubmissaoCientifica {
     public Resumo() {
         super(8, 8, 4);
     }
-
 }

@@ -29,5 +29,6 @@ public class Palestra extends SubmissaoApresentacao {
         return super.toString()
                 + "\n\nCurrículo: "
                 + curriculo;
+
     }
 }
