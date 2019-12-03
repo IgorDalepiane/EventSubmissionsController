@@ -5,7 +5,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,10 +16,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckListView;
 import org.controlsfx.control.textfield.CustomTextField;
-import org.controlsfx.control.textfield.TextFields;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.type.TextType;
 import submissao.Situacao;
 import submissao.Submissao;
 import submissao.SubmissaoCientifica;
@@ -28,7 +25,6 @@ import submissao.categorias.*;
 import utils.HibernateUtil;
 import utils.InterfaceUtil;
 
-import java.awt.*;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
@@ -147,7 +143,7 @@ public class submissaoInsertController implements Initializable {
     @FXML
     private Button closeButton;
 
-    private Submissao sub;
+    boolean[] listenerSet = {false, false, false};
 
     private void init() {
         removeSpecifics();
@@ -174,159 +170,93 @@ public class submissaoInsertController implements Initializable {
                 radioMinicurso,
                 radioPalestra);
         toggle.selectedToggleProperty().addListener((observable, old_toggle, new_toggle) -> {
+            if (!gridSubmissao.isVisible())
+                gridSubmissao.setVisible(true);
             if (new_toggle != null) {
                 textFieldTitulo.clear();
                 autores.getItems().clear();
                 choiceBoxSituacao.setValue(null);
+                instituicoes.getItems().clear();
+                palavraschave.getItems().clear();
                 removeSpecifics();
                 radioSelecionado = (RadioButton) new_toggle;
                 switch (radioSelecionado.getText()) {
                     case "Artigo":
-                        sub = new Artigo();
+                        Artigo art = new Artigo();
+                        initSubPai(art);
                         break;
                     case "Minicurso":
-                        sub = new Minicurso();
+                        Minicurso mini = new Minicurso();
+                        initSubPai(mini);
                         break;
                     case "Monografia":
-                        sub = new Monografia();
+                        Monografia mono = new Monografia();
+                        initSubPai(mono);
                         break;
                     case "Palestra":
-                        sub = new Palestra();
+                        Palestra pal = new Palestra();
+                        initSubPai(pal);
                         break;
                     case "Relatório Técnico":
-                        sub = new RelatorioTecnico();
+                        RelatorioTecnico rel = new RelatorioTecnico();
+                        initSubPai(rel);
                         break;
                     case "Resumo":
-                        sub = new Resumo();
+                        Resumo res = new Resumo();
+                        initSubPai(res);
                         break;
                 }
-                initSubPai();
             }
         });
     }
 
     //Submissao.class
-    private void initSubPai() {
-        textFieldAutor.setOnKeyPressed(keyEvent -> {
-            if (keyEvent.getCode().equals(KeyCode.ENTER)) {
-                String input = textFieldAutor.getText();
-
-                textFieldAutor.clear();
-                textFieldAutor.setDisable(true);
-
-                if (autores.getItems().size() < sub.getMAX_AUTORES())
-                    if (!autores.getItems().contains(input))
-                        autores.getItems().add(input);
-                    else
-                        InterfaceUtil.erro("O autor já faz parte da submissão.");
-                else if (sub.getClass().getSimpleName().equals("Palestra") // caso especial pois a palestra e a
-                        || sub.getClass().getSimpleName().equals("Monografia") // monografia só podem ter um autor
-                        && autores.getItems().size() == sub.getMAX_AUTORES()) {
-                    if (!autores.getItems().contains(input))
-                        autores.getItems().set(0, input);
-                    else
-                        InterfaceUtil.erro("O autor já faz parte da submissão.");
-                } else
-                    InterfaceUtil.erro("Número máximo de autores excedido.");
-
-
-                textFieldAutor.setDisable(false);
-            }
-        });
-
-        autores.getCheckModel().getCheckedIndices().addListener((ListChangeListener<Integer>) c -> {
-            while (c.next()) {
-                if (c.wasAdded()) {
-                    for (int i : c.getAddedSubList()) {
-                        if (autores.getItems().size() > 1)
-                            autores.getItems().remove(i);
-                    }
-                }
-            }
-        });
+    private void initSubPai(Submissao sub) {
+        //listeners autor
+        if (!listenerSet[0])
+            Utils.textField_To_List(sub.getMAX_AUTORES(), textFieldAutor, autores, sub);
+        listenerSet[0] = true;
 
         if (radioCientificas.contains(radioSelecionado))
-            initSubMed("SubmissaoCientifica");
+            initSubMed("SubmissaoCientifica", sub);
         else if (radioApresentacoes.contains(radioSelecionado))
-            initSubMed("SubmissaoApresentacao");
+            initSubMed("SubmissaoApresentacao", sub);
     }
 
     //SubmissaoApresentacao.class e SubmissaoCientifica.class
-    private void initSubMed(String tipoMed) {
+    private void initSubMed(String tipoMed, Submissao sub) {
         switch (tipoMed) {
             case "SubmissaoApresentacao":
                 vboxTop.getChildren().add(2, gridApresentacao);
 
-                initSubLow(radioSelecionado.getText());
+                initSubLow(radioSelecionado.getText(), sub);
                 break;
             case "SubmissaoCientifica":
                 vboxTop.getChildren().add(2, gridCientifica);
 
-                textFieldInstituicao.setOnKeyPressed(keyEvent -> {
-                    if (keyEvent.getCode().equals(KeyCode.ENTER)) {
-                        String input = textFieldInstituicao.getText();
+                if (!listenerSet[1])
+                    Utils.textField_To_List(
+                            ((SubmissaoCientifica) sub).getMAX_INSTITUICOES(),
+                            textFieldInstituicao,
+                            instituicoes,
+                            sub);
+                listenerSet[1] = true;
 
-                        textFieldInstituicao.clear();
-                        textFieldInstituicao.setDisable(true);
-
-                        if (instituicoes.getItems().size() < ((SubmissaoCientifica) sub).getMAX_INSTITUICOES())
-                            if (!instituicoes.getItems().contains(input))
-                                instituicoes.getItems().add(input.toUpperCase());
-                            else
-                                InterfaceUtil.erro("Essa instituição já faz parte da submissão.");
-                        else InterfaceUtil.erro("Número máximo de instituições excedido.");
-
-                        textFieldInstituicao.setDisable(false);
-                    }
-                });
-                instituicoes.getItems().addAll(FXCollections.observableArrayList());
-                instituicoes.getCheckModel().getCheckedIndices().addListener((ListChangeListener<Integer>) c -> {
-                    while (c.next()) {
-                        if (c.wasAdded()) {
-                            for (int i : c.getAddedSubList()) {
-                                if (instituicoes.getItems().size() > 1)
-                                    instituicoes.getItems().remove(i);
-                            }
-                        }
-                    }
-                });
-
-                textFieldPalavraschave.setOnKeyPressed(keyEvent -> {
-                    if (keyEvent.getCode().equals(KeyCode.ENTER)) {
-                        String input = textFieldPalavraschave.getText();
-
-                        textFieldPalavraschave.clear();
-                        textFieldPalavraschave.setDisable(true);
-                        if (palavraschave.getItems().size() < ((SubmissaoCientifica) sub).getMAX_PALAVRASCHAVE())
-                            if (!palavraschave.getItems().contains(input))
-                                palavraschave.getItems().add(input);
-                            else
-                                InterfaceUtil.erro("Essa palavra chave já existe na submissão.");
-                        else InterfaceUtil.erro("Número máximo de palavras chave excedido");
-
-                        textFieldPalavraschave.setDisable(false);
-                    }
-                });
-                palavraschave.getItems().addAll(FXCollections.observableArrayList());
-                palavraschave.getCheckModel().getCheckedIndices().addListener((ListChangeListener<Integer>) c -> {
-                    while (c.next()) {
-                        if (c.wasAdded()) {
-                            for (int i : c.getAddedSubList()) {
-                                if (palavraschave.getItems().size() > 1)
-                                    palavraschave.getItems().remove(i);
-                            }
-                        }
-                    }
-                });
-
-                initSubLow(radioSelecionado.getText());
+                if (!listenerSet[2])
+                    Utils.textField_To_List(
+                            ((SubmissaoCientifica) sub).getMAX_PALAVRASCHAVE(),
+                            textFieldPalavraschave,
+                            palavraschave,
+                            sub);
+                listenerSet[2] = true;
+                initSubLow(radioSelecionado.getText(), sub);
                 break;
         }
 
     }
 
     //Classes específicas
-    private void initSubLow(String especifica) {
+    private void initSubLow(String especifica, Submissao sub) {
         vboxTop.getChildren().add(3, gridEspecifica);
         switch (especifica) {
             case "Artigo":
@@ -362,7 +292,7 @@ public class submissaoInsertController implements Initializable {
         }
         btnConfirmar.setOnAction(e -> {
             try {
-                insert();
+                insert(sub);
             } catch (HibernateException | FormularioException ex) {
                 InterfaceUtil.erro(ex.getMessage());
             }
@@ -377,9 +307,9 @@ public class submissaoInsertController implements Initializable {
                 gridEspecifica);
     }
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        gridSubmissao.setVisible(false);
         //popular as choiceboxex
         choiceBoxSituacao.setItems(FXCollections.observableArrayList(Situacao.values()));
         spTipo.setItems(FXCollections.observableArrayList(Tipo.values()));
@@ -388,8 +318,8 @@ public class submissaoInsertController implements Initializable {
         init();
     }
 
-    private void insert() throws HibernateException, FormularioException {
-        String errorMsg = methods.form(sub, textFieldTitulo, choiceBoxSituacao, autores, textAreaResumo, textAreaAbstract, sliderDuracao, spRecursos, spMetodologia, spCurriculo, instituicoes, palavraschave, spResumo, spAbstract, spTipo, spOrientador, spCurso, spAno, spNumPags);
+    private void insert(Submissao sub) throws HibernateException, FormularioException {
+        String errorMsg = Utils.form(sub, textFieldTitulo, choiceBoxSituacao, autores, textAreaResumo, textAreaAbstract, sliderDuracao, spRecursos, spMetodologia, spCurriculo, instituicoes, palavraschave, spResumo, spAbstract, spTipo, spOrientador, spCurso, spAno, spNumPags);
 
         if (errorMsg.equals("")) {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();

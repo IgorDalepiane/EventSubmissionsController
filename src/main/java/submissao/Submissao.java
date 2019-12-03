@@ -28,7 +28,7 @@ public abstract class Submissao {
 
     private final int MAX_AUTORES;
 
-    Submissao(int max) {
+    protected Submissao(int max) {
         MAX_AUTORES = max;
     }
 

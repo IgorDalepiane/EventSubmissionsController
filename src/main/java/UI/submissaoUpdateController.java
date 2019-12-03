@@ -134,51 +134,13 @@ public class submissaoUpdateController implements Initializable {
     private void initSubPai() {
         textFieldTitulo.setText(sub.getTitulo());
         choiceBoxSituacao.setValue(sub.getSituacao());
-        textFieldAutor.setOnKeyPressed(keyEvent -> {
-            if (keyEvent.getCode().equals(KeyCode.ENTER)) {
-                String input = textFieldAutor.getText();
 
-                textFieldAutor.clear();
-                textFieldAutor.setDisable(true);
-
-                if (autores.getItems().size() < sub.getMAX_AUTORES())
-                    if (!autores.getItems().contains(input))
-                        autores.getItems().add(input);
-                    else
-                        InterfaceUtil.erro("O autor já faz parte da submissão.");
-                else if (sub.getClass().getSimpleName().equals("Palestra") // caso especial pois a palestra e a
-                        || sub.getClass().getSimpleName().equals("Monografia") // monografia só podem ter um autor
-                        && autores.getItems().size() == sub.getMAX_AUTORES()) {
-                    if (!autores.getItems().contains(input))
-                        autores.getItems().set(0, input);
-                    else
-                        InterfaceUtil.erro("O autor já faz parte da submissão.");
-                } else
-                    InterfaceUtil.erro("Número máximo de autores excedido.");
-
-
-                textFieldAutor.setDisable(false);
-            }
-        });
-
-        //carrega a list dos autores
         autores.getItems().addAll(FXCollections.observableArrayList(sub.getAutores()));
-        autores.getCheckModel().getCheckedIndices().addListener((ListChangeListener<Integer>) c -> {
-            while (c.next()) {
-                if (c.wasAdded()) {
-                    for (int i : c.getAddedSubList()) {
-                        if (autores.getItems().size() != 1) {
-                            autores.getItems().remove(i);
-                        } else {
-                            InterfaceUtil.erro("Deve existir pelo menos um autor.");
-                        }
-                    }
-                }
-            }
-        });
+        Utils.textField_To_List(sub.getMAX_AUTORES(), textFieldAutor, autores, sub);
 
         initSubMed();
     }
+
 
     //SubmissaoApresentacao.class e SubmissaoCientifica.class
     private void initSubMed() {
@@ -195,69 +157,18 @@ public class submissaoUpdateController implements Initializable {
             case "SubmissaoCientifica":
                 vboxTop.getChildren().add(1, gridCientifica);
 
-                textFieldInstituicao.setOnKeyPressed(keyEvent -> {
-                    if (keyEvent.getCode().equals(KeyCode.ENTER)) {
-                        String input = textFieldInstituicao.getText();
-
-                        textFieldInstituicao.clear();
-                        textFieldInstituicao.setDisable(true);
-
-                        if (instituicoes.getItems().size() < ((SubmissaoCientifica) sub).getMAX_INSTITUICOES())
-                            if (!instituicoes.getItems().contains(input))
-                                instituicoes.getItems().add(input.toUpperCase());
-                            else
-                                InterfaceUtil.erro("Essa instituição já faz parte da submissão.");
-                        else InterfaceUtil.erro("Número máximo de instituições excedido.");
-
-                        textFieldInstituicao.setDisable(false);
-                    }
-                });
                 instituicoes.getItems().addAll(FXCollections.observableArrayList(((SubmissaoCientifica) sub).getInstituicao()));
-                instituicoes.getCheckModel().getCheckedIndices().addListener((ListChangeListener<Integer>) c -> {
-                    while (c.next()) {
-                        if (c.wasAdded()) {
-                            for (int i : c.getAddedSubList()) {
-                                if (instituicoes.getItems().size() != 1) {
-                                    instituicoes.getItems().remove(i);
-                                } else {
-                                    InterfaceUtil.erro("Deve existir pelo menos uma instituição.");
-                                }
-                            }
-                        }
-                    }
-                });
-
-                textFieldPalavraschave.setOnKeyPressed(keyEvent -> {
-                    if (keyEvent.getCode().equals(KeyCode.ENTER)) {
-                        String input = textFieldPalavraschave.getText();
-
-                        textFieldPalavraschave.clear();
-                        textFieldPalavraschave.setDisable(true);
-                        if (palavraschave.getItems().size() < ((SubmissaoCientifica) sub).getMAX_PALAVRASCHAVE())
-                            if (!palavraschave.getItems().contains(input))
-                                palavraschave.getItems().add(input);
-                            else
-                                InterfaceUtil.erro("Essa palavra chave já existe na submissão.");
-                        else InterfaceUtil.erro("Número máximo de palavras chave excedido");
-
-                        textFieldPalavraschave.setDisable(false);
-                    }
-                });
+                Utils.textField_To_List(
+                        ((SubmissaoCientifica) sub).getMAX_INSTITUICOES(),
+                        textFieldInstituicao,
+                        instituicoes,
+                        sub);
                 palavraschave.getItems().addAll(FXCollections.observableArrayList(((SubmissaoCientifica) sub).getPalavraChave()));
-                palavraschave.getCheckModel().getCheckedIndices().addListener((ListChangeListener<Integer>) c -> {
-                    while (c.next()) {
-                        if (c.wasAdded()) {
-                            for (int i : c.getAddedSubList()) {
-                                if (palavraschave.getItems().size() != 1) {
-                                    palavraschave.getItems().remove(i);
-                                } else {
-                                    InterfaceUtil.erro("Deve existir pelo menos uma palavra chave.");
-                                }
-                            }
-                        }
-                    }
-                });
-
+                Utils.textField_To_List(
+                        ((SubmissaoCientifica) sub).getMAX_PALAVRASCHAVE(),
+                        textFieldPalavraschave,
+                        palavraschave,
+                        sub);
                 initSubLow();
                 break;
         }
@@ -347,7 +258,7 @@ public class submissaoUpdateController implements Initializable {
     }
 
     private void update(Submissao subGenerica) throws HibernateException, FormularioException {
-        String errorMsg = methods.form(
+        String errorMsg = Utils.form(
                 subGenerica,
                 textFieldTitulo,
                 choiceBoxSituacao,

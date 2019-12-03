@@ -1,20 +1,24 @@
 package UI;
 
+import javafx.collections.ListChangeListener;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import org.controlsfx.control.CheckListView;
+import org.controlsfx.control.textfield.CustomTextField;
 import submissao.Situacao;
 import submissao.Submissao;
 import submissao.SubmissaoApresentacao;
 import submissao.SubmissaoCientifica;
 import submissao.categorias.*;
+import utils.InterfaceUtil;
 
 import java.time.Year;
-import java.util.Calendar;
 
-class methods {
+class Utils {
+    //formulário de inserção / update das submissões
     static String form(Submissao subGenerica,
                        TextField textFieldTitulo,
                        ChoiceBox<Situacao> choiceBoxSituacao,
@@ -230,5 +234,47 @@ class methods {
                 }
         }
         return errorMsg;
+    }
+
+    //adiciona o texto inserido na caixa acima à lista abaixo
+    static void textField_To_List(int maxAlgumaCoisa, CustomTextField textField, CheckListView<String> checkListView, Submissao sub) {
+        textField.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+                String input = textField.getText().replaceAll("\\P{L}", "");
+
+                if (!input.equals("")) {
+                    textField.clear();
+                    textField.setDisable(true);
+
+                    if (checkListView.getItems().size() < maxAlgumaCoisa)
+                        if (!checkListView.getItems().contains(input))
+                            checkListView.getItems().add(input);
+                        else
+                            InterfaceUtil.erro("O autor já faz parte da submissão.");
+                    else if (sub.getClass().getSimpleName().equals("Palestra") // caso especial pois a palestra e a
+                            || sub.getClass().getSimpleName().equals("Monografia") // monografia só podem ter um autor
+                            && checkListView.getItems().size() == sub.getMAX_AUTORES()) {
+                        if (!checkListView.getItems().contains(input))
+                            checkListView.getItems().set(0, input);
+                        else
+                            InterfaceUtil.erro("O autor já faz parte da submissão.");
+                    } else
+                        InterfaceUtil.erro("Número máximo de autores excedido.");
+                    textField.setDisable(false);
+                }
+            }
+        });
+        checkListView.getCheckModel().getCheckedIndices().addListener((ListChangeListener<Integer>) c -> {
+            while (c.next()) {
+                if (c.wasAdded()) {
+                    for (int i : c.getAddedSubList()) {
+                        if (checkListView.getItems().size() != 1)
+                            checkListView.getItems().remove(i);
+                        else
+                            InterfaceUtil.erro("Deve existir pelo menos um elemento na lista.");
+                    }
+                }
+            }
+        });
     }
 }
