@@ -19,25 +19,26 @@ import java.time.Year;
 
 class Utils {
     //formulário de inserção / update das submissões
-    static String form(Submissao subGenerica,
-                       TextField textFieldTitulo,
-                       ChoiceBox<Situacao> choiceBoxSituacao,
-                       CheckListView<String> autores,
-                       TextArea textAreaResumo,
-                       TextArea textAreaAbstract,
-                       Slider sliderDuracao,
-                       TextArea spRecursos,
-                       TextArea spMetodologia,
-                       TextField spCurriculo,
-                       CheckListView<String> instituicoes,
-                       CheckListView<String> palavraschave,
-                       TextArea spResumo,
-                       TextArea spAbstract,
-                       ChoiceBox<Tipo> spTipo,
-                       TextField spOrientador,
-                       TextField spCurso,
-                       TextField spAno,
-                       TextField spNumPags) {
+    static String form(
+            Submissao subGenerica,
+            TextField textFieldTitulo,
+            ChoiceBox<Situacao> choiceBoxSituacao,
+            CheckListView<String> autores,
+            TextArea textAreaResumo,
+            TextArea textAreaAbstract,
+            Slider sliderDuracao,
+            TextArea spRecursos,
+            TextArea spMetodologia,
+            TextField spCurriculo,
+            CheckListView<String> instituicoes,
+            CheckListView<String> palavraschave,
+            TextArea spResumo,
+            TextArea spAbstract,
+            ChoiceBox<Tipo> spTipo,
+            TextField spOrientador,
+            TextField spCurso,
+            TextField spAno,
+            TextField spNumPags) {
         String errorMsg = "";
         int maxChars = (int) Math.pow(2, 16) - 1;
         //Submissao.class
@@ -237,7 +238,11 @@ class Utils {
     }
 
     //adiciona o texto inserido na caixa acima à lista abaixo
-    static void textField_To_List(int maxAlgumaCoisa, CustomTextField textField, CheckListView<String> checkListView, Submissao sub) {
+    static void textField_To_List(
+            int maxAlgumaCoisa,
+            CustomTextField textField,
+            CheckListView<String> checkListView,
+            Submissao sub) {
         textField.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
                 String input = textField.getText().replaceAll("\\P{L}", "");
@@ -250,16 +255,16 @@ class Utils {
                         if (!checkListView.getItems().contains(input))
                             checkListView.getItems().add(input);
                         else
-                            InterfaceUtil.erro("O autor já faz parte da submissão.");
+                            InterfaceUtil.erro("O elemento já faz parte da submissão.");
                     else if (sub.getClass().getSimpleName().equals("Palestra") // caso especial pois a palestra e a
                             || sub.getClass().getSimpleName().equals("Monografia") // monografia só podem ter um autor
                             && checkListView.getItems().size() == sub.getMAX_AUTORES()) {
                         if (!checkListView.getItems().contains(input))
                             checkListView.getItems().set(0, input);
                         else
-                            InterfaceUtil.erro("O autor já faz parte da submissão.");
+                            InterfaceUtil.erro("Já existe esse elemento na lista.");
                     } else
-                        InterfaceUtil.erro("Número máximo de autores excedido.");
+                        InterfaceUtil.erro("Número máximo de elementos excedido. ("+maxAlgumaCoisa+")");
                     textField.setDisable(false);
                 }
             }
