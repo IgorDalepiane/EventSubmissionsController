@@ -16,9 +16,9 @@
 
         <!-- Database connection settings -->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://127.0.0.1:3306/unita3</property>
-        <property name="connection.username">root</property>
-        <property name="connection.password"/>
+        <property name="connection.url">jdbc:mysql://sql10.freemysqlhosting.net:3306/sql10314189</property>
+        <property name="connection.username">sql10314189</property>
+        <property name="connection.password">XPvVEwRLlp</property>
 
         <!-- JDBC connection pool (use the built-in) -->
         <property name="connection.pool_size">1</property>
@@ -30,7 +30,7 @@
         <property name="show_sql">true</property>
 
         <!-- Drop and re-create the database schema on startup -->
-        <property name="hbm2ddl.auto">create</property>
+<!--        <property name="hbm2ddl.auto">create</property>-->
 
     </session-factory>
 
