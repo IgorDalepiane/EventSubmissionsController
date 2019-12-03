@@ -1,2 +1,3 @@
 # uniTA3
-Para rodar o software na sua máquina, clone o repositório e defina o SDK do projeto e o *language level* para a versão 11.
+Se o software não iniciar de primeira, 
+defina o SDK do projeto e o *language level* para a versão 11 manualmente.
