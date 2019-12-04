@@ -19,7 +19,6 @@ import java.time.Year;
 
 class Utils {
     static boolean listenerAtivo = false;
-
     //formulário de inserção / update das submissões
     static String form(
             Submissao subGenerica,
@@ -273,13 +272,16 @@ class Utils {
             keyEvent.consume();
         });
         ListChangeListener<Integer> c = change -> {
-            while (change.next())
-                if (checkListView.getItems().size() != 1)
-                    checkListView.getItems().remove(change);
-                else
-                    InterfaceUtil.erro("Deve existir pelo menos um elemento na lista.");
+            while (change.next()) {
+                for (int i : change.getAddedSubList()) {
+                    if (checkListView.getItems().size() != 1)
+                        checkListView.getItems().remove(i);
+                    else
+                        InterfaceUtil.erro("Deve existir pelo menos um elemento na lista.");
+                }
+            }
         };
-        if (!listenerAtivo) {
+        if(!listenerAtivo) {
             checkListView.getCheckModel().getCheckedIndices().addListener(c);
             listenerAtivo = true;
         }
