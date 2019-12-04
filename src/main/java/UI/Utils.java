@@ -18,6 +18,8 @@ import utils.InterfaceUtil;
 import java.time.Year;
 
 class Utils {
+    static boolean listenerAtivo = false;
+
     //formulário de inserção / update das submissões
     static String form(
             Submissao subGenerica,
@@ -264,22 +266,23 @@ class Utils {
                         else
                             InterfaceUtil.erro("Já existe esse elemento na lista.");
                     } else
-                        InterfaceUtil.erro("Número máximo de elementos excedido. ("+maxAlgumaCoisa+")");
+                        InterfaceUtil.erro("Número máximo de elementos excedido. (" + maxAlgumaCoisa + ")");
                     textField.setDisable(false);
                 }
             }
+            keyEvent.consume();
         });
-        checkListView.getCheckModel().getCheckedIndices().addListener((ListChangeListener<Integer>) c -> {
-            while (c.next()) {
-                if (c.wasAdded()) {
-                    for (int i : c.getAddedSubList()) {
-                        if (checkListView.getItems().size() != 1)
-                            checkListView.getItems().remove(i);
-                        else
-                            InterfaceUtil.erro("Deve existir pelo menos um elemento na lista.");
-                    }
-                }
-            }
-        });
+        ListChangeListener<Integer> c = change -> {
+            while (change.next())
+                if (checkListView.getItems().size() != 1)
+                    checkListView.getItems().remove(change);
+                else
+                    InterfaceUtil.erro("Deve existir pelo menos um elemento na lista.");
+        };
+        if (!listenerAtivo) {
+            checkListView.getCheckModel().getCheckedIndices().addListener(c);
+            listenerAtivo = true;
+        }
+
     }
 }

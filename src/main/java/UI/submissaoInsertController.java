@@ -212,10 +212,7 @@ public class submissaoInsertController implements Initializable {
 
     //Submissao.class
     private void initSubPai(Submissao sub) {
-        //listeners autor
-        if (!listenerSet[0])
-            Utils.textField_To_List(sub.getMAX_AUTORES(), textFieldAutor, autores, sub);
-        listenerSet[0] = true;
+        Utils.textField_To_List(sub.getMAX_AUTORES(), textFieldAutor, autores, sub);
 
         if (radioCientificas.contains(radioSelecionado))
             initSubMed("SubmissaoCientifica", sub);
@@ -234,21 +231,9 @@ public class submissaoInsertController implements Initializable {
             case "SubmissaoCientifica":
                 vboxTop.getChildren().add(2, gridCientifica);
 
-                if (!listenerSet[1])
-                    Utils.textField_To_List(
-                            ((SubmissaoCientifica) sub).getMAX_INSTITUICOES(),
-                            textFieldInstituicao,
-                            instituicoes,
-                            sub);
-                listenerSet[1] = true;
+                Utils.textField_To_List(((SubmissaoCientifica) sub).getMAX_INSTITUICOES(), textFieldInstituicao, instituicoes, sub);
+                Utils.textField_To_List(((SubmissaoCientifica) sub).getMAX_PALAVRASCHAVE(), textFieldPalavraschave, palavraschave, sub);
 
-                if (!listenerSet[2])
-                    Utils.textField_To_List(
-                            ((SubmissaoCientifica) sub).getMAX_PALAVRASCHAVE(),
-                            textFieldPalavraschave,
-                            palavraschave,
-                            sub);
-                listenerSet[2] = true;
                 initSubLow(radioSelecionado.getText(), sub);
                 break;
         }
