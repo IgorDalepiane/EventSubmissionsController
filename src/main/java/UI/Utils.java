@@ -274,10 +274,11 @@ class Utils {
         });
         ListChangeListener<Integer> c = change -> {
             while (change.next()) {
-                if (checkListView.getItems().size() != 1)
-                    checkListView.getItems().remove(change);
-                else
-                    InterfaceUtil.erro("Deve existir pelo menos um elemento na lista.");
+                for (int i : change.getAddedSubList())
+                    if (checkListView.getItems().size() != 1)
+                        checkListView.getItems().remove(i);
+                    else
+                        InterfaceUtil.erro("Deve existir pelo menos um elemento na lista.");
             }
         };
 
