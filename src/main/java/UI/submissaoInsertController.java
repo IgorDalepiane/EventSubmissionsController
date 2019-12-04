@@ -1,8 +1,8 @@
 package UI;
 
+import com.sun.xml.bind.Util;
 import exceptions.FormularioException;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -10,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -212,7 +211,10 @@ public class submissaoInsertController implements Initializable {
 
     //Submissao.class
     private void initSubPai(Submissao sub) {
-        Utils.textField_To_List(sub.getMAX_AUTORES(), textFieldAutor, autores, sub);
+        if(Utils.adicionarListener[0]) {
+            Utils.textField_To_List(sub.getMAX_AUTORES(), textFieldAutor, autores, sub);
+            Utils.adicionarListener[0] = false;
+        }
 
         if (radioCientificas.contains(radioSelecionado))
             initSubMed("SubmissaoCientifica", sub);
@@ -231,8 +233,14 @@ public class submissaoInsertController implements Initializable {
             case "SubmissaoCientifica":
                 vboxTop.getChildren().add(2, gridCientifica);
 
-                Utils.textField_To_List(((SubmissaoCientifica) sub).getMAX_INSTITUICOES(), textFieldInstituicao, instituicoes, sub);
-                Utils.textField_To_List(((SubmissaoCientifica) sub).getMAX_PALAVRASCHAVE(), textFieldPalavraschave, palavraschave, sub);
+                if (Utils.adicionarListener[1]) {
+                    Utils.textField_To_List(((SubmissaoCientifica) sub).getMAX_INSTITUICOES(), textFieldInstituicao, instituicoes, sub);
+                    Utils.adicionarListener[1] = false;
+                }
+                if(Utils.adicionarListener[2]) {
+                    Utils.textField_To_List(((SubmissaoCientifica) sub).getMAX_PALAVRASCHAVE(), textFieldPalavraschave, palavraschave, sub);
+                    Utils.adicionarListener[2] = false;
+                }
 
                 initSubLow(radioSelecionado.getText(), sub);
                 break;
@@ -294,6 +302,7 @@ public class submissaoInsertController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        Utils.adicionarListener = new boolean[]{true, true, true};
         gridSubmissao.setVisible(false);
         //popular as choiceboxex
         choiceBoxSituacao.setItems(FXCollections.observableArrayList(Situacao.values()));
