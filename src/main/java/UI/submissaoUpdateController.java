@@ -252,6 +252,7 @@ public class submissaoUpdateController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        Utils.adicionarListener = new boolean[]{true, true, true};
         removeSpecifics();
         //popular a choicebox
         choiceBoxSituacao.setItems(FXCollections.observableArrayList(Situacao.values()));
